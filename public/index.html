@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAG Pipeline Animation</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>RAG Pipeline Animated Demo</h1>
+    <p id="phase-text">Initializing pipeline...</p>
+  </header>
+
+  <main id="stage">
+    <div id="document-zone" aria-label="Document collection area"></div>
+    <div id="chunk-zone" aria-label="Chunked document area"></div>
+    <div id="vector-grid" aria-label="Vector index grid"></div>
+    <div id="query-dot" aria-hidden="true"></div>
+    <div id="llm-bubble">
+      <div class="typing-line"></div>
+      <span id="llm-text">The system is composing a concise answer...</span>
+    </div>
+  </main>
+
+  <footer>
+    <p>All steps play automatically. RAG (Retrieval Augmented Generation) combines search with generation.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
