@@ -416,6 +416,20 @@ header h1 {
 .node.secure { background: var(--secure); }
 .node.onprem { background: var(--onprem); }
 
+.flow-label {
+  position: absolute;
+  padding: 6px 10px;
+  border-radius: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 0.78rem;
+  color: var(--muted);
+  background: rgba(12, 17, 31, 0.8);
+  border: 1px solid rgba(123, 215, 243, 0.25);
+  box-shadow: 0 10px 16px rgba(0, 0, 0, 0.35);
+}
+
 .arrow {
   position: absolute;
   height: 4px;
