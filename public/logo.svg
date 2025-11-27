@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 170" role="img" aria-labelledby="title desc">
+  <title id="title">AIR IoT logo</title>
+  <desc id="desc">Gradient lettering for AIR IoT with a signal icon</desc>
+  <defs>
+    <linearGradient id="a" x1="0%" x2="100%" y1="0%" y2="0%">
+      <stop offset="0%" stop-color="#8ef6ff" />
+      <stop offset="45%" stop-color="#2fc0ff" />
+      <stop offset="100%" stop-color="#12a9ff" />
+    </linearGradient>
+    <linearGradient id="b" x1="0%" x2="0%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#f5f7fa" />
+      <stop offset="100%" stop-color="#b8c7d6" />
+    </linearGradient>
+  </defs>
+  <rect width="540" height="170" rx="28" fill="#060910" />
+  <g fill="url(#b)" transform="translate(36 36)">
+    <path d="M0 96 32 0h46l32 96h-38l-6-20H44l-6 20H0zm56-48h20l-10-32-10 32z" />
+  </g>
+  <g transform="translate(160 36)" fill="url(#a)">
+    <path d="M0 96V0h70c22 0 36 13 36 33 0 14-7 25-18 30l20 33H66L48 65H32v31H0zm66-60c7 0 12-4 12-11s-5-11-12-11H32v22h34z" />
+  </g>
+  <g transform="translate(320 36)" fill="url(#a)">
+    <path d="M0 96V0h32v96H0z" />
+  </g>
+  <g transform="translate(380 36)">
+    <rect width="70" height="28" rx="6" fill="url(#a)" />
+    <rect y="68" width="70" height="28" rx="6" fill="url(#a)" />
+    <path d="M0 48c0-10 6-18 18-18h34c12 0 18 8 18 18v4H0v-4z" fill="url(#b)" />
+    <circle cx="68" cy="14" r="6" fill="#0d1a2f" />
+  </g>
+  <g transform="translate(472 64)" fill="url(#a)">
+    <circle cx="16" cy="56" r="8" />
+    <path d="M0 46c0-11 9-20 20-20s20 9 20 20h-8c0-7-5-12-12-12s-12 5-12 12H0z" />
+    <path d="M4 26c0-15 12-26 26-26s26 11 26 26h-9c0-10-7-17-17-17s-17 7-17 17H4z" opacity="0.75" />
+  </g>
+</svg>
