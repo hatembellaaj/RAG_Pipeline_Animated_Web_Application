@@ -48,6 +48,12 @@ const scenes = [
     action: animateCallbot,
   },
   {
+    id: 'architecture',
+    title: 'Architecture: Storyboard to OpenAI Assistant',
+    desc: 'How the animated experience exchanges context with the EnviroHealthAdvisor-style assistant.',
+    action: animateArchitecture,
+  },
+  {
     id: 'constraints',
     title: 'Medical Constraints',
     desc: 'Privacy, security, and compliance gates flash red.',
@@ -216,6 +222,48 @@ function createArrow(from, to, delay = 0) {
   arrow.style.transform = `translateY(${to.y - from.y}px)`;
   arrow.style.animationDelay = `${delay}ms`;
   return arrow;
+}
+
+function renderMermaidDiagram(diagramText, container, key) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'mermaid-wrapper';
+
+  if (!window.mermaid) {
+    const fallback = document.createElement('pre');
+    fallback.className = 'diagram-block';
+    fallback.textContent = diagramText;
+    wrapper.appendChild(fallback);
+    container.appendChild(wrapper);
+    return wrapper;
+  }
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'dark',
+    fontFamily: 'Inter, system-ui, sans-serif',
+    securityLevel: 'loose',
+  });
+
+  const diagramId = `mermaid-${key}-${Date.now()}`;
+  const target = document.createElement('div');
+  target.id = diagramId;
+  target.className = 'mermaid-diagram';
+  wrapper.appendChild(target);
+  container.appendChild(wrapper);
+
+  mermaid
+    .render(diagramId, diagramText)
+    .then(({ svg }) => {
+      target.innerHTML = svg;
+    })
+    .catch(() => {
+      const fallback = document.createElement('pre');
+      fallback.className = 'diagram-block';
+      fallback.textContent = diagramText;
+      wrapper.appendChild(fallback);
+    });
+
+  return wrapper;
 }
 
 function animateCore() {
@@ -671,21 +719,72 @@ function animateCallbot() {
     helperList.appendChild(card);
   });
 
-  const diagram = document.createElement('pre');
-  diagram.className = 'diagram-block';
-  diagram.textContent = `flowchart LR\n  User[User request] --> Embed[Embedding]\n  Embed --> Retrieve[Retriever + Vector DB]\n  Retrieve --> Rank[Re-ranker]\n  Rank --> Orchestrator[Tool Orchestrator]\n  Orchestrator -->|Calls| Tools[Domain tools]\n  Orchestrator --> LLM[LLM]\n  Tools --> Orchestrator\n  LLM --> Response[Optimized response]`;
+  const diagramText = `flowchart LR\n  User[User request] --> Embed[Embedding]\n  Embed --> Retrieve[Retriever + Vector DB]\n  Retrieve --> Rank[Re-ranker]\n  Rank --> Orchestrator[Tool Orchestrator]\n  Orchestrator -->|Calls| Tools[Domain tools]\n  Orchestrator --> LLM[LLM]\n  Tools --> Orchestrator\n  LLM --> Response[Optimized response]\n  Response --> Feedback[Safety & policy checks]`;
+
+  const mermaidCard = renderMermaidDiagram(diagramText, grid, 'callbot');
 
   const caption = document.createElement('div');
   caption.className = 'diagram-caption';
-  caption.textContent = 'Mermaid architecture sketch of the tool-enhanced response loop.';
+  caption.textContent = 'Rendered with Mermaid to show how retrieval, ranking, tools, and guardrails shape the seventh scene.';
 
-  grid.append(helperList, diagram, caption);
+  mermaidCard.appendChild(caption);
+  grid.append(helperList, mermaidCard);
+}
+
+function animateArchitecture() {
+  clearCanvas();
+  sceneTitle.textContent = scenes[7].title;
+  sceneDesc.textContent = scenes[7].desc;
+  updatePhase('Telemetry, prompts, and vector lookups flow between the storyboard and the OpenAI Assistant.');
+
+  const grid = document.createElement('div');
+  grid.className = 'architecture-grid';
+  canvas.appendChild(grid);
+
+  const highlights = [
+    {
+      title: 'Storyboard UI',
+      body: 'Collects clicks and scene context from the animated walkthrough.',
+    },
+    {
+      title: 'Node/Express API',
+      body: 'Packages questions, scene IDs, and session info before handing off to the assistant.',
+    },
+    {
+      title: 'EnviroHealthAdvisor Assistant',
+      body: 'OpenAI Assistant configured with retrieval + tools for environmental health insights.',
+    },
+    {
+      title: 'Vector + File Search',
+      body: 'Searches curated environmental health files and embeddings to ground answers.',
+    },
+  ];
+
+  const highlightList = document.createElement('div');
+  highlightList.className = 'highlight-list';
+  highlights.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'highlight-card';
+    card.style.animationDelay = `${idx * 120}ms`;
+    card.innerHTML = `<strong>${item.title}</strong><p>${item.body}</p>`;
+    highlightList.appendChild(card);
+  });
+
+  const diagramText = `flowchart LR\n  UI[Animated Storyboard UI] --> API[Node/Express bridge]\n  API --> Assistant[OpenAI Assistant]\n  Assistant -->|Retrieval| VectorStore[Vector store + file search]\n  Assistant --> Tools[Domain tools & calculators]\n  VectorStore --> Assistant\n  Tools --> Assistant\n  Assistant --> Response[Grounded response to UI]\n  Response --> Telemetry[Scene telemetry & follow-up cues]`;
+
+  const diagramCard = renderMermaidDiagram(diagramText, grid, 'architecture');
+  const caption = document.createElement('div');
+  caption.className = 'diagram-caption';
+  caption.textContent = 'Architecture inspired by EnviroHealthAdvisor: the SPA hands context to the OpenAI Assistant, which queries vector/file search before replying.';
+  diagramCard.appendChild(caption);
+
+  grid.append(highlightList, diagramCard);
 }
 
 function animateConstraints() {
   clearCanvas();
-  sceneTitle.textContent = scenes[7].title;
-  sceneDesc.textContent = scenes[7].desc;
+  sceneTitle.textContent = scenes[8].title;
+  sceneDesc.textContent = scenes[8].desc;
   updatePhase('Compliance locks guard PHI with audit trails and encryption.');
 
   const shield = document.createElement('div');
@@ -704,8 +803,8 @@ function animateConstraints() {
 
 function animateSolution() {
   clearCanvas();
-  sceneTitle.textContent = scenes[8].title;
-  sceneDesc.textContent = scenes[8].desc;
+  sceneTitle.textContent = scenes[9].title;
+  sceneDesc.textContent = scenes[9].desc;
   updatePhase('On-prem vector store feeds only curated chunks to the cloud LLM.');
 
   const store = createNode('On-Prem Vector Store', 'onprem');
@@ -736,8 +835,8 @@ function animateSolution() {
 
 function animateTools() {
   clearCanvas();
-  sceneTitle.textContent = scenes[9].title;
-  sceneDesc.textContent = scenes[9].desc;
+  sceneTitle.textContent = scenes[10].title;
+  sceneDesc.textContent = scenes[10].desc;
   updatePhase('Quality dials highlight coverage, grounding, and hallucination checks.');
 
   ['Coverage', 'Faithfulness', 'Noise filter'].forEach((label, idx) => {
@@ -758,8 +857,8 @@ function animateTools() {
 
 function animateResearch() {
   clearCanvas();
-  sceneTitle.textContent = scenes[10].title;
-  sceneDesc.textContent = scenes[10].desc;
+  sceneTitle.textContent = scenes[11].title;
+  sceneDesc.textContent = scenes[11].desc;
   updatePhase('Research acronyms orbit the hub: Agents-to-Agents, MCP, ACP.');
 
   const hub = document.createElement('div');
