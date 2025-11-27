@@ -89,6 +89,73 @@ function createCard(title, subtitle) {
   return card;
 }
 
+function createPortrait(label, subtitle) {
+  const frame = document.createElement('div');
+  frame.className = 'photo-frame';
+
+  const portrait = document.createElement('div');
+  portrait.className = 'photo user-photo';
+
+  const badge = document.createElement('div');
+  badge.className = 'photo-label';
+  badge.innerHTML = `<strong>${label}</strong><span>${subtitle}</span>`;
+
+  frame.append(portrait, badge);
+  return frame;
+}
+
+function createMonitor() {
+  const monitor = document.createElement('div');
+  monitor.className = 'device monitor';
+
+  const screen = document.createElement('div');
+  screen.className = 'screen';
+  screen.innerHTML = `
+    <div class="window-bar">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="screen-glow"></div>
+  `;
+  monitor.appendChild(screen);
+  return monitor;
+}
+
+function createTerminalStack() {
+  const stack = document.createElement('div');
+  stack.className = 'terminal-stack';
+  ['ls -la', 'python ingest.py', 'npm run dev'].forEach((command, idx) => {
+    const line = document.createElement('div');
+    line.className = 'command-line';
+    line.style.animationDelay = `${idx * 200}ms`;
+    line.innerHTML = `<span class="prompt">$</span> ${command}`;
+    stack.appendChild(line);
+  });
+  return stack;
+}
+
+function createAiLogos() {
+  const row = document.createElement('div');
+  row.id = 'ai-logo-row';
+  const logos = [
+    { name: 'ChatGPT', tone: 'emerald' },
+    { name: 'Gemini', tone: 'sky' },
+    { name: 'Claude', tone: 'amber' },
+    { name: 'Llama 3', tone: 'pink' },
+    { name: 'Mistral', tone: 'violet' },
+    { name: 'Grok', tone: 'slate' },
+  ];
+
+  logos.forEach((logo, idx) => {
+    const chip = document.createElement('div');
+    chip.className = `ai-logo ${logo.tone}`;
+    chip.textContent = logo.name;
+    chip.style.animationDelay = `${idx * 90}ms`;
+    row.appendChild(chip);
+  });
+
+  return row;
+}
+
 function createNode(label, tone = 'cloud') {
   const node = document.createElement('div');
   node.className = `node ${tone}`;
@@ -119,17 +186,32 @@ function animateCore() {
 
   const userCard = createCard('User', 'How do environmental factors affect health?');
   userCard.classList.add('bubble-card', 'from-user');
-  userCard.style.left = '60px';
-  userCard.style.top = '140px';
+  userCard.style.left = '40px';
+  userCard.style.top = '270px';
   canvas.appendChild(userCard);
+
+  const portrait = createPortrait('Curious User', 'Health researcher');
+  portrait.style.left = '52px';
+  portrait.style.top = '90px';
+  canvas.appendChild(portrait);
+
+  const monitor = createMonitor();
+  monitor.style.left = '270px';
+  monitor.style.top = '120px';
+  canvas.appendChild(monitor);
+
+  const terminals = createTerminalStack();
+  terminals.style.left = '510px';
+  terminals.style.top = '130px';
+  canvas.appendChild(terminals);
 
   const chatgptCard = createCard(
     'ChatGPT',
     'Air quality, water safety, housing, and heat exposure all shape health outcomes.'
   );
   chatgptCard.classList.add('bubble-card', 'from-ai');
-  chatgptCard.style.left = '340px';
-  chatgptCard.style.top = '80px';
+  chatgptCard.style.left = '280px';
+  chatgptCard.style.top = '320px';
   canvas.appendChild(chatgptCard);
 
   const summaryCard = createCard(
@@ -137,26 +219,20 @@ function animateCore() {
     'Reduce pollution exposure, stay hydrated in heat waves, and improve ventilation to protect wellbeing.'
   );
   summaryCard.classList.add('bubble-card', 'callout');
-  summaryCard.style.left = '240px';
-  summaryCard.style.top = '250px';
+  summaryCard.style.left = '500px';
+  summaryCard.style.top = '290px';
   canvas.appendChild(summaryCard);
 
   const connectors = [
-    createArrow({ x: 140, y: 170 }, { x: 400, y: 130 }),
-    createArrow({ x: 420, y: 140 }, { x: 320, y: 270 }, 160),
+    createArrow({ x: 160, y: 210 }, { x: 340, y: 180 }),
+    createArrow({ x: 380, y: 180 }, { x: 560, y: 200 }, 120),
+    createArrow({ x: 420, y: 220 }, { x: 320, y: 340 }, 240),
+    createArrow({ x: 620, y: 220 }, { x: 570, y: 320 }, 360),
   ];
   connectors.forEach((arrow) => canvas.appendChild(arrow));
 
-  const chipRow = document.createElement('div');
-  chipRow.id = 'ai-row';
-  ['Gemini', 'Mistral', 'Claude', 'Llama 3', 'Grok'].forEach((label, idx) => {
-    const chip = document.createElement('div');
-    chip.className = 'ai-chip';
-    chip.textContent = label;
-    chip.style.animationDelay = `${idx * 120}ms`;
-    chipRow.appendChild(chip);
-  });
-  canvas.appendChild(chipRow);
+  const logos = createAiLogos();
+  canvas.appendChild(logos);
 }
 
 function animateUseCases() {
