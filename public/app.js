@@ -6,6 +6,12 @@ const canvas = document.getElementById('scene-canvas');
 
 const scenes = [
   {
+    id: 'presentation-root',
+    title: 'Presentation Roadmap',
+    desc: 'The root path through the assistant, web app, data sensitivity, RAG limits, and the next steps.',
+    action: animatePresentationRoot,
+  },
+  {
     id: 'intro',
     title: 'ChatGPT answers a health question',
     desc: 'A user asks “How do environmental factors affect health?” while other generative AIs listen in.',
@@ -78,6 +84,10 @@ const scenes = [
     action: animateResearch,
   },
 ];
+
+function getSceneData(id) {
+  return scenes.find((scene) => scene.id === id) || { title: '', desc: '' };
+}
 
 function updatePhase(text) {
   phaseText.textContent = text;
@@ -266,10 +276,99 @@ function renderMermaidDiagram(diagramText, container, key) {
   return wrapper;
 }
 
+function animatePresentationRoot() {
+  clearCanvas();
+  const scene = getSceneData('presentation-root');
+  sceneTitle.textContent = scene.title;
+  sceneDesc.textContent = scene.desc;
+  updatePhase('Follow the glowing root path: assistant, web app, safety, open source realities, and what comes next.');
+
+  const path = document.createElement('div');
+  path.className = 'root-path';
+  canvas.appendChild(path);
+
+  const header = document.createElement('div');
+  header.className = 'path-header';
+  header.innerHTML = '<h3>Root Path</h3><div class="path-sparkline"></div>';
+  path.appendChild(header);
+
+  const sparkline = header.querySelector('.path-sparkline');
+  Array.from({ length: 4 }).forEach(() => {
+    const dot = document.createElement('div');
+    dot.className = 'spark';
+    sparkline.appendChild(dot);
+  });
+
+  const rail = document.createElement('div');
+  rail.className = 'path-rail';
+  path.appendChild(rail);
+
+  Array.from({ length: 3 }).forEach((_, idx) => {
+    const orb = document.createElement('div');
+    orb.className = 'path-orb';
+    orb.style.animationDelay = `${idx * 0.4}s`;
+    path.appendChild(orb);
+  });
+
+  const grid = document.createElement('div');
+  grid.className = 'path-grid';
+  path.appendChild(grid);
+
+  const steps = [
+    {
+      title: 'Create an OpenAI assistant',
+      desc: 'Spin up env_assistant grounded on curated scientific papers with tuned instructions.',
+    },
+    {
+      title: 'Build the data collection web app',
+      desc: 'Capture user prompts and metadata, then stream them to the assistant for recommendations.',
+    },
+    {
+      title: 'Sensitive data + solutions',
+      desc: 'Encrypt in transit, redact inputs, and gate responses to respect privacy obligations.',
+    },
+    {
+      title: 'Open-source RAG limitations',
+      desc: 'Latency, eval coverage, and maintenance gaps make some OSS stacks risky for production.',
+    },
+    {
+      title: 'Ideas and future work',
+      desc: 'Add active learning loops, observability panels, and sandboxed tool calls with more motion.',
+    },
+  ];
+
+  steps.forEach((step, idx) => {
+    const card = document.createElement('div');
+    card.className = 'path-step';
+    card.style.animationDelay = `${idx * 120}ms`;
+
+    const number = document.createElement('div');
+    number.className = 'step-number';
+    number.textContent = idx + 1;
+
+    const title = document.createElement('div');
+    title.className = 'step-title';
+    title.textContent = step.title;
+
+    const desc = document.createElement('p');
+    desc.className = 'step-desc';
+    desc.textContent = step.desc;
+
+    card.append(number, title, desc);
+    grid.appendChild(card);
+  });
+
+  const badge = document.createElement('div');
+  badge.className = 'path-badge';
+  badge.textContent = 'Start here';
+  path.appendChild(badge);
+}
+
 function animateCore() {
   clearCanvas();
-  sceneTitle.textContent = scenes[0].title;
-  sceneDesc.textContent = scenes[0].desc;
+  const scene = getSceneData('intro');
+  sceneTitle.textContent = scene.title;
+  sceneDesc.textContent = scene.desc;
   updatePhase('ChatGPT replies while other frontier models glow in the background.');
 
   const spotlight = document.createElement('div');
@@ -337,8 +436,9 @@ function animateCore() {
 
 function animateUseCases() {
   clearCanvas();
-  sceneTitle.textContent = scenes[1].title;
-  sceneDesc.textContent = scenes[1].desc;
+  const scene = getSceneData('use-cases');
+  sceneTitle.textContent = scene.title;
+  sceneDesc.textContent = scene.desc;
   updatePhase('Each channel lights up with a hero image to show how it helps.');
 
   const gallery = document.createElement('div');
@@ -365,8 +465,9 @@ function animateUseCases() {
 
 function animateLogic() {
   clearCanvas();
-  sceneTitle.textContent = scenes[2].title;
-  sceneDesc.textContent = scenes[2].desc;
+  const scene = getSceneData('logic');
+  sceneTitle.textContent = scene.title;
+  sceneDesc.textContent = scene.desc;
   updatePhase('Ingestion builds the index while user requests embed, retrieve, and rank.');
 
   const ingestLabel = document.createElement('div');
@@ -422,8 +523,9 @@ function animateLogic() {
 
 function animateIngestion() {
   clearCanvas();
-  sceneTitle.textContent = scenes[3].title;
-  sceneDesc.textContent = scenes[3].desc;
+  const scene = getSceneData('ingestion');
+  sceneTitle.textContent = scene.title;
+  sceneDesc.textContent = scene.desc;
   updatePhase('Files stream in gray, turn clean white, chunk, embed, then stack into the index.');
 
   const track = document.createElement('div');
@@ -509,8 +611,9 @@ function animateIngestion() {
 
 function animateResponse() {
   clearCanvas();
-  sceneTitle.textContent = scenes[4].title;
-  sceneDesc.textContent = scenes[4].desc;
+  const scene = getSceneData('response');
+  sceneTitle.textContent = scene.title;
+  sceneDesc.textContent = scene.desc;
   updatePhase('A user request embeds, retrieves, re-ranks, and flows into the LLM answer.');
 
   const track = document.createElement('div');
@@ -568,8 +671,9 @@ function animateResponse() {
 
 function animateAssistantSetup() {
   clearCanvas();
-  sceneTitle.textContent = scenes[5].title;
-  sceneDesc.textContent = scenes[5].desc;
+  const scene = getSceneData('assistant-setup');
+  sceneTitle.textContent = scene.title;
+  sceneDesc.textContent = scene.desc;
   updatePhase('Name, instruct, select tools, and tune sampling before going live.');
 
   const grid = document.createElement('div');
@@ -681,8 +785,9 @@ function animateAssistantSetup() {
 
 function animateCallbot() {
   clearCanvas();
-  sceneTitle.textContent = scenes[6].title;
-  sceneDesc.textContent = scenes[6].desc;
+  const scene = getSceneData('assistant');
+  sceneTitle.textContent = scene.title;
+  sceneDesc.textContent = scene.desc;
   updatePhase('Retrieval, tools, and guardrails cooperate to optimize the LLM response.');
 
   const grid = document.createElement('div');
@@ -733,8 +838,9 @@ function animateCallbot() {
 
 function animateArchitecture() {
   clearCanvas();
-  sceneTitle.textContent = scenes[7].title;
-  sceneDesc.textContent = scenes[7].desc;
+  const scene = getSceneData('architecture');
+  sceneTitle.textContent = scene.title;
+  sceneDesc.textContent = scene.desc;
   updatePhase('Telemetry, prompts, and vector lookups flow between the storyboard and the OpenAI Assistant.');
 
   const grid = document.createElement('div');
@@ -796,8 +902,9 @@ function animateArchitecture() {
 
 function animateConstraints() {
   clearCanvas();
-  sceneTitle.textContent = scenes[8].title;
-  sceneDesc.textContent = scenes[8].desc;
+  const scene = getSceneData('constraints');
+  sceneTitle.textContent = scene.title;
+  sceneDesc.textContent = scene.desc;
   updatePhase('Compliance locks guard PHI with audit trails and encryption.');
 
   const shield = document.createElement('div');
@@ -816,8 +923,9 @@ function animateConstraints() {
 
 function animateSolution() {
   clearCanvas();
-  sceneTitle.textContent = scenes[9].title;
-  sceneDesc.textContent = scenes[9].desc;
+  const scene = getSceneData('solution');
+  sceneTitle.textContent = scene.title;
+  sceneDesc.textContent = scene.desc;
   updatePhase('On-prem vector store feeds only curated chunks to the cloud LLM.');
 
   const store = createNode('On-Prem Vector Store', 'onprem');
@@ -848,8 +956,9 @@ function animateSolution() {
 
 function animateTools() {
   clearCanvas();
-  sceneTitle.textContent = scenes[10].title;
-  sceneDesc.textContent = scenes[10].desc;
+  const scene = getSceneData('tools');
+  sceneTitle.textContent = scene.title;
+  sceneDesc.textContent = scene.desc;
   updatePhase('Quality dials highlight coverage, grounding, and hallucination checks.');
 
   ['Coverage', 'Faithfulness', 'Noise filter'].forEach((label, idx) => {
@@ -870,8 +979,9 @@ function animateTools() {
 
 function animateResearch() {
   clearCanvas();
-  sceneTitle.textContent = scenes[11].title;
-  sceneDesc.textContent = scenes[11].desc;
+  const scene = getSceneData('research');
+  sceneTitle.textContent = scene.title;
+  sceneDesc.textContent = scene.desc;
   updatePhase('Research acronyms orbit the hub: Agents-to-Agents, MCP, ACP.');
 
   const hub = document.createElement('div');
