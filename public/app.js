@@ -1,263 +1,393 @@
-const AUTO_DELAYS = [1500, 1400, 1400, 1600, 1600, 2000];
-
 const phaseText = document.getElementById('phase-text');
-const documentZone = document.getElementById('document-zone');
-const chunkZone = document.getElementById('chunk-zone');
-const embeddingZone = document.getElementById('embedding-zone');
-const vectorGrid = document.getElementById('vector-grid');
-const queryDot = document.getElementById('query-dot');
-const llmBubble = document.getElementById('llm-bubble');
-const llmText = document.getElementById('llm-text');
-const toggleAutoBtn = document.getElementById('toggle-auto');
-const stage = document.getElementById('stage');
-const hintText = document.getElementById('hint-text');
+const menu = document.getElementById('menu');
+const sceneTitle = document.getElementById('scene-title');
+const sceneDesc = document.getElementById('scene-desc');
+const canvas = document.getElementById('scene-canvas');
 
-const explanations = [
-  'Collecting raw documents from various sources',
-  'Cleaning, normalizing and converting data',
-  'Cutting documents into semantic chunks',
-  'Generating vector embeddings for each chunk',
-  'Storing embeddings in the vector database',
-  'Retrieving relevant vectors based on similarity search',
-  'LLM composes the final grounded answer',
-];
-
-const steps = [
-  { text: explanations[0], action: createDocuments },
-  { text: explanations[1], action: preprocessDocuments },
-  { text: explanations[2], action: chunkDocuments },
+const scenes = [
   {
-    text: 'Generating vector embeddings with spatial directionality',
-    action: convertToDots,
+    id: 'intro',
+    title: 'Generative AI — Creative Engine',
+    desc: 'Particles orbiting a glowing core illustrate how generative AI synthesizes ideas.',
+    action: animateCore,
   },
-  { text: explanations[4], action: buildGrid },
-  { text: explanations[5], action: triggerRetrieval },
-  { text: explanations[6], action: showAnswer },
+  {
+    id: 'use-cases',
+    title: 'Use Cases: Chatbot, Callbot & More',
+    desc: 'Different channels light up to show where generative AI can help.',
+    action: animateUseCases,
+  },
+  {
+    id: 'logic',
+    title: 'Pipeline Logic: Ingest & Answer',
+    desc: 'A skeleton of the ingestion and answering loop.',
+    action: animateLogic,
+  },
+  {
+    id: 'ingestion',
+    title: 'Ingestion Flow to Indexing',
+    desc: 'Documents flow through cleaning, chunking, and indexing.',
+    action: animateIngestion,
+  },
+  {
+    id: 'response',
+    title: 'Responding to a User',
+    desc: 'Retrieval and LLM orchestration compose the final reply.',
+    action: animateResponse,
+  },
+  {
+    id: 'assistant',
+    title: 'Assistants in Real Life (Callbot)',
+    desc: 'A callbot scenario routes intents and gathers knowledge.',
+    action: animateCallbot,
+  },
+  {
+    id: 'constraints',
+    title: 'Medical Constraints',
+    desc: 'Privacy, security, and compliance gates flash red.',
+    action: animateConstraints,
+  },
+  {
+    id: 'solution',
+    title: 'RAG On-Prem Remedy',
+    desc: 'On-prem RAG keeps PHI local while calling the LLM with filtered chunks.',
+    action: animateSolution,
+  },
+  {
+    id: 'tools',
+    title: 'Better Representative Chunks',
+    desc: 'Diagnostics for chunk quality and faithful answers.',
+    action: animateTools,
+  },
+  {
+    id: 'research',
+    title: 'New Research: A2A, MCP, ACP',
+    desc: 'Emerging paradigms orbit a research hub.',
+    action: animateResearch,
+  },
 ];
 
-let currentStep = -1;
-let autoMode = false;
-let autoTimeout;
-
-function updateText(text) {
-  phaseText.classList.add('fade-out');
-  setTimeout(() => {
-    phaseText.textContent = text;
-    phaseText.classList.remove('fade-out');
-    phaseText.classList.add('fade-in');
-    setTimeout(() => phaseText.classList.remove('fade-in'), 500);
-  }, 350);
+function updatePhase(text) {
+  phaseText.textContent = text;
+  phaseText.classList.remove('flash');
+  void phaseText.offsetWidth;
+  phaseText.classList.add('flash');
 }
 
-function resetScene() {
-  clearTimeout(autoTimeout);
-  queryDot.classList.remove('active');
-  llmBubble.classList.remove('show');
-  llmText.style.animation = 'none';
-  llmText.style.maxWidth = '0';
-  llmText.style.opacity = '0';
-  void llmText.offsetWidth;
-  llmText.style.animation = '';
-
-  documentZone.innerHTML = '';
-  chunkZone.innerHTML = '';
-  embeddingZone.innerHTML = '';
-  vectorGrid.innerHTML = '';
-
-  documentZone.style.opacity = '1';
-  chunkZone.style.opacity = '0';
-  embeddingZone.style.opacity = '0';
-  vectorGrid.style.opacity = '0';
-  vectorGrid.style.transform = 'scale(0.9)';
-
-  currentStep = -1;
-  hintText.textContent = 'Cliquez sur la scène pour démarrer et avancer.';
-  updateText('Ready to explore the RAG pipeline manually');
+function clearCanvas() {
+  canvas.innerHTML = '';
 }
 
-function createDocuments() {
-  const colors = ['#ff9f1c', '#f94144', '#f3722c', '#f8961e', '#43aa8b', '#577590'];
-  documentZone.innerHTML = '';
-  for (let i = 0; i < 8; i++) {
-    const doc = document.createElement('div');
-    doc.className = 'document';
-    const width = 100 + Math.random() * 80;
-    const height = 70 + Math.random() * 50;
-    doc.style.width = `${width}px`;
-    doc.style.height = `${height}px`;
-    doc.style.background = `linear-gradient(135deg, ${colors[i % colors.length]}44, ${colors[(i + 2) % colors.length]}aa)`;
-    doc.style.borderColor = `${colors[(i + 1) % colors.length]}55`;
-    doc.style.animationDelay = `${i * 120}ms`;
-    doc.style.boxShadow = '0 10px 30px rgba(0,0,0,0.2)';
-    documentZone.appendChild(doc);
+function createCard(title, subtitle) {
+  const card = document.createElement('div');
+  card.className = 'card pulse';
+  const h3 = document.createElement('h3');
+  h3.textContent = title;
+  const p = document.createElement('p');
+  p.textContent = subtitle;
+  card.append(h3, p);
+  return card;
+}
+
+function createNode(label, tone = 'cloud') {
+  const node = document.createElement('div');
+  node.className = `node ${tone}`;
+  node.textContent = label;
+  return node;
+}
+
+function createArrow(from, to, delay = 0) {
+  const arrow = document.createElement('div');
+  arrow.className = 'arrow';
+  arrow.style.left = `${from.x}px`;
+  arrow.style.top = `${from.y}px`;
+  arrow.style.width = `${to.x - from.x}px`;
+  arrow.style.transform = `translateY(${to.y - from.y}px)`;
+  arrow.style.animationDelay = `${delay}ms`;
+  return arrow;
+}
+
+function animateCore() {
+  clearCanvas();
+  sceneTitle.textContent = scenes[0].title;
+  sceneDesc.textContent = scenes[0].desc;
+  updatePhase('Particles swirl around a creative AI core.');
+
+  const core = document.createElement('div');
+  core.id = 'core';
+  canvas.appendChild(core);
+
+  for (let i = 0; i < 32; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'orbit-dot';
+    dot.style.animationDelay = `${i * 80}ms`;
+    canvas.appendChild(dot);
   }
 }
 
-function preprocessDocuments() {
-  const docs = document.querySelectorAll('.document');
-  docs.forEach((doc, idx) => {
-    setTimeout(() => doc.classList.add('whiten'), idx * 120);
+function animateUseCases() {
+  clearCanvas();
+  sceneTitle.textContent = scenes[1].title;
+  sceneDesc.textContent = scenes[1].desc;
+  updatePhase('Channels pulse to showcase chatbot, callbot, copilots, and agents.');
+
+  const channels = [
+    ['Chatbot', 'Conversational answers'],
+    ['Callbot', 'Voice AI routing'],
+    ['Copilot', 'Productivity boosts'],
+    ['Agent', 'Autonomous tasks'],
+  ];
+
+  channels.forEach((info, idx) => {
+    const card = createCard(info[0], info[1]);
+    card.style.animationDelay = `${idx * 120}ms`;
+    card.style.left = `${12 + idx * 22}%`;
+    card.style.top = `${20 + (idx % 2) * 24}%`;
+    canvas.appendChild(card);
+  });
+
+  const pulse = document.createElement('div');
+  pulse.className = 'grid-pulse';
+  canvas.appendChild(pulse);
+}
+
+function animateLogic() {
+  clearCanvas();
+  sceneTitle.textContent = scenes[2].title;
+  sceneDesc.textContent = scenes[2].desc;
+  updatePhase('Ingestion prepares data; requests fetch answers in a loop.');
+
+  const ingest = createNode('Ingestion', 'onprem');
+  ingest.style.left = '80px';
+  ingest.style.top = '80px';
+  canvas.appendChild(ingest);
+
+  const index = createNode('Index', 'secure');
+  index.style.left = '260px';
+  index.style.top = '200px';
+  canvas.appendChild(index);
+
+  const answer = createNode('Answering', 'cloud');
+  answer.style.left = '480px';
+  answer.style.top = '120px';
+  canvas.appendChild(answer);
+
+  const arrows = [
+    createArrow({ x: 120, y: 120 }, { x: 320, y: 220 }),
+    createArrow({ x: 320, y: 220 }, { x: 540, y: 160 }, 200),
+    createArrow({ x: 520, y: 160 }, { x: 160, y: 120 }, 400),
+  ];
+  arrows.forEach((a) => canvas.appendChild(a));
+}
+
+function animateIngestion() {
+  clearCanvas();
+  sceneTitle.textContent = scenes[3].title;
+  sceneDesc.textContent = scenes[3].desc;
+  updatePhase('Docs are cleaned, chunked, and finally indexed.');
+
+  const steps = [
+    createNode('Docs', 'cloud'),
+    createNode('Cleaning', 'cloud'),
+    createNode('Chunking', 'cloud'),
+    createNode('Indexing', 'secure'),
+  ];
+
+  steps.forEach((node, idx) => {
+    node.style.left = `${70 + idx * 160}px`;
+    node.style.top = '140px';
+    node.style.animationDelay = `${idx * 140}ms`;
+    canvas.appendChild(node);
+  });
+
+  steps.slice(0, -1).forEach((_, idx) => {
+    const arrow = createArrow({ x: 120 + idx * 160, y: 160 }, { x: 220 + idx * 160, y: 160 }, idx * 140);
+    canvas.appendChild(arrow);
+  });
+
+  const confetti = document.createElement('div');
+  confetti.className = 'confetti';
+  canvas.appendChild(confetti);
+}
+
+function animateResponse() {
+  clearCanvas();
+  sceneTitle.textContent = scenes[4].title;
+  sceneDesc.textContent = scenes[4].desc;
+  updatePhase('Relevant chunks are retrieved, then composed by the LLM.');
+
+  const query = createNode('User Query', 'secure');
+  query.style.left = '80px';
+  query.style.top = '200px';
+  canvas.appendChild(query);
+
+  const retrieval = createNode('Retriever', 'onprem');
+  retrieval.style.left = '260px';
+  retrieval.style.top = '200px';
+  canvas.appendChild(retrieval);
+
+  const llm = createNode('LLM', 'cloud');
+  llm.style.left = '440px';
+  llm.style.top = '200px';
+  canvas.appendChild(llm);
+
+  [
+    createArrow({ x: 120, y: 220 }, { x: 300, y: 220 }),
+    createArrow({ x: 320, y: 220 }, { x: 500, y: 220 }, 200),
+  ].forEach((a) => canvas.appendChild(a));
+
+  const bubble = document.createElement('div');
+  bubble.id = 'answer-bubble';
+  bubble.textContent = 'Grounded answer is built from top-ranked passages...';
+  canvas.appendChild(bubble);
+}
+
+function animateCallbot() {
+  clearCanvas();
+  sceneTitle.textContent = scenes[5].title;
+  sceneDesc.textContent = scenes[5].desc;
+  updatePhase('A call comes in, intents route to knowledge and voice synthesis.');
+
+  const phone = createNode('Call In', 'secure');
+  phone.style.left = '80px';
+  phone.style.top = '120px';
+  canvas.appendChild(phone);
+
+  const intent = createNode('Intent Router', 'cloud');
+  intent.style.left = '240px';
+  intent.style.top = '80px';
+  canvas.appendChild(intent);
+
+  const kb = createNode('Knowledge', 'onprem');
+  kb.style.left = '240px';
+  kb.style.top = '220px';
+  canvas.appendChild(kb);
+
+  const tts = createNode('Voice Synth', 'cloud');
+  tts.style.left = '440px';
+  tts.style.top = '140px';
+  canvas.appendChild(tts);
+
+  [
+    createArrow({ x: 120, y: 140 }, { x: 280, y: 100 }),
+    createArrow({ x: 120, y: 140 }, { x: 280, y: 240 }, 120),
+    createArrow({ x: 280, y: 240 }, { x: 480, y: 180 }, 240),
+    createArrow({ x: 280, y: 100 }, { x: 480, y: 180 }, 360),
+  ].forEach((a) => canvas.appendChild(a));
+}
+
+function animateConstraints() {
+  clearCanvas();
+  sceneTitle.textContent = scenes[6].title;
+  sceneDesc.textContent = scenes[6].desc;
+  updatePhase('Compliance locks guard PHI with audit trails and encryption.');
+
+  const shield = document.createElement('div');
+  shield.id = 'shield';
+  canvas.appendChild(shield);
+
+  ['PHI encryption', 'Audit logs', 'Access policy'].forEach((text, idx) => {
+    const badge = createCard(text, 'Required');
+    badge.classList.add('alert');
+    badge.style.left = `${90 + idx * 170}px`;
+    badge.style.top = `${180 + (idx % 2) * 30}px`;
+    badge.style.animationDelay = `${idx * 120}ms`;
+    canvas.appendChild(badge);
   });
 }
 
-function chunkDocuments() {
-  chunkZone.innerHTML = '';
-  chunkZone.style.opacity = '1';
-  documentZone.style.opacity = '0.45';
-  embeddingZone.style.opacity = '0';
-  const docs = document.querySelectorAll('.document');
-  docs.forEach((doc, idx) => {
-    const chunk = document.createElement('div');
-    chunk.className = 'chunk';
-    chunk.style.animationDelay = `${idx * 120}ms`;
-    const parts = Math.floor(3 + Math.random() * 2);
-    for (let p = 0; p < parts; p++) {
-      const piece = document.createElement('div');
-      piece.className = 'chunk-piece';
-      piece.style.width = `${85 + Math.random() * 10}%`;
-      piece.style.animationDelay = `${p * 80}ms`;
-      chunk.appendChild(piece);
-    }
-    chunkZone.appendChild(chunk);
+function animateSolution() {
+  clearCanvas();
+  sceneTitle.textContent = scenes[7].title;
+  sceneDesc.textContent = scenes[7].desc;
+  updatePhase('On-prem vector store feeds only curated chunks to the cloud LLM.');
+
+  const store = createNode('On-Prem Vector Store', 'onprem');
+  store.style.left = '80px';
+  store.style.top = '180px';
+  canvas.appendChild(store);
+
+  const filter = createNode('Policy Filter', 'secure');
+  filter.style.left = '300px';
+  filter.style.top = '180px';
+  canvas.appendChild(filter);
+
+  const llm = createNode('Cloud LLM', 'cloud');
+  llm.style.left = '520px';
+  llm.style.top = '180px';
+  canvas.appendChild(llm);
+
+  [
+    createArrow({ x: 140, y: 200 }, { x: 340, y: 200 }),
+    createArrow({ x: 360, y: 200 }, { x: 580, y: 200 }, 200),
+  ].forEach((a) => canvas.appendChild(a));
+
+  const badge = document.createElement('div');
+  badge.id = 'green-badge';
+  badge.textContent = 'PHI stays local';
+  canvas.appendChild(badge);
+}
+
+function animateTools() {
+  clearCanvas();
+  sceneTitle.textContent = scenes[8].title;
+  sceneDesc.textContent = scenes[8].desc;
+  updatePhase('Quality dials highlight coverage, grounding, and hallucination checks.');
+
+  ['Coverage', 'Faithfulness', 'Noise filter'].forEach((label, idx) => {
+    const dial = document.createElement('div');
+    dial.className = 'dial';
+    dial.style.left = `${100 + idx * 180}px`;
+    dial.style.top = '160px';
+    dial.style.animationDelay = `${idx * 200}ms`;
+    dial.innerHTML = `<span>${label}</span>`;
+    canvas.appendChild(dial);
+  });
+
+  const warning = document.createElement('div');
+  warning.id = 'warning-card';
+  warning.innerHTML = '<strong>Edge Case:</strong> "How many times does \'disease\' appear?" requires exact match logic.';
+  canvas.appendChild(warning);
+}
+
+function animateResearch() {
+  clearCanvas();
+  sceneTitle.textContent = scenes[9].title;
+  sceneDesc.textContent = scenes[9].desc;
+  updatePhase('Research acronyms orbit the hub: Agents-to-Agents, MCP, ACP.');
+
+  const hub = document.createElement('div');
+  hub.id = 'research-hub';
+  hub.textContent = 'Research Hub';
+  canvas.appendChild(hub);
+
+  ['A2A', 'MCP', 'ACP', 'Eval', 'Safety'].forEach((label, idx) => {
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = label;
+    chip.style.setProperty('--angle', `${idx * 72}deg`);
+    chip.style.setProperty('--delay', `${idx * 120}ms`);
+    canvas.appendChild(chip);
   });
 }
 
-function convertToDots() {
-  const chunks = document.querySelectorAll('.chunk');
-  chunks.forEach((chunk, idx) => {
-    setTimeout(() => {
-      chunk.classList.add('dotified');
-      chunk.querySelectorAll('.chunk-piece').forEach((piece, pIdx) => {
-        piece.style.animation = 'floaty 2.6s ease-in-out infinite';
-        piece.style.animationDelay = `${pIdx * 80}ms`;
-      });
-    }, idx * 120);
-  });
-
-  embeddingZone.innerHTML = '';
-  const scatterPoints = 20;
-  const colors = ['#12d8ff', '#7bd7f3', '#ffd166', '#4cc9f0'];
-  for (let i = 0; i < scatterPoints; i++) {
-    const point = document.createElement('div');
-    point.className = 'embedding-point';
-    const size = 10 + Math.random() * 12;
-    const x = 8 + Math.random() * 82;
-    const y = 8 + Math.random() * 72;
-    const rotation = Math.random() * 360;
-    const arrow = document.createElement('span');
-    arrow.className = 'vector-arrow';
-    arrow.style.transform = `rotate(${rotation}deg) scale(${0.6 + Math.random() * 0.7})`;
-    point.appendChild(arrow);
-
-    point.style.width = `${size}px`;
-    point.style.height = `${size}px`;
-    point.style.left = `${x}%`;
-    point.style.top = `${y}%`;
-    point.style.background = `radial-gradient(circle, ${colors[i % colors.length]}, rgba(16, 120, 255, 0.45))`;
-    point.style.animation = 'drift 5s ease-in-out infinite';
-    point.style.animationDelay = `${i * 80}ms`;
-    embeddingZone.appendChild(point);
-  }
-  embeddingZone.style.opacity = '1';
-  documentZone.style.opacity = '0.35';
-  chunkZone.style.opacity = '0.6';
-}
-
-function buildGrid() {
-  vectorGrid.innerHTML = '';
-  const totalCells = 25;
-  for (let i = 0; i < totalCells; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'vector-cell';
-    cell.style.animationDelay = `${(i % 5) * 120}ms`;
-    vectorGrid.appendChild(cell);
-  }
-  vectorGrid.style.opacity = '1';
-  vectorGrid.style.transform = 'scale(1)';
-  chunkZone.style.opacity = '0.35';
-  documentZone.style.opacity = '0.5';
-  embeddingZone.style.opacity = '0.25';
-
-  // cascade glow ripple
-  setTimeout(() => {
-    const cells = vectorGrid.querySelectorAll('.vector-cell');
-    cells.forEach((cell, idx) => {
-      setTimeout(() => cell.classList.add('glow'), idx * 70);
-    });
-  }, 200);
-}
-
-function triggerRetrieval() {
-  queryDot.classList.add('active');
-  const cells = Array.from(vectorGrid.querySelectorAll('.vector-cell'));
-  const matches = [5, 11, 16];
-  matches.forEach((idx, order) => {
-    if (cells[idx]) {
-      setTimeout(() => cells[idx].classList.add('match'), order * 300 + 400);
-    }
+function buildMenu() {
+  scenes.forEach((scene, idx) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = `${idx + 1}. ${scene.title}`;
+    btn.dataset.scene = scene.id;
+    btn.addEventListener('click', () => selectScene(idx));
+    menu.appendChild(btn);
   });
 }
 
-function showAnswer() {
-  llmBubble.classList.add('show');
-  llmText.style.animation = 'none';
-  void llmText.offsetWidth;
-  llmText.style.animation = 'typing 3s steps(36, end) forwards';
+function selectScene(index) {
+  const buttons = menu.querySelectorAll('button');
+  buttons.forEach((btn, idx) => btn.classList.toggle('active', idx === index));
+  const scene = scenes[index];
+  scene.action();
 }
 
-function nextStep(triggeredByAuto = false) {
-  if (autoMode && !triggeredByAuto) return;
-  if (currentStep >= steps.length - 1) {
-    hintText.textContent = 'Fin du pipeline. Cliquez pour recommencer.';
-    return;
-  }
-
-  currentStep += 1;
-  const step = steps[currentStep];
-  updateText(step.text);
-  step.action();
-
-  if (!autoMode) {
-    hintText.textContent = 'Cliquez pour passer à l’étape suivante.';
-  }
-
-  if (autoMode && currentStep < steps.length - 1) {
-    autoTimeout = setTimeout(() => nextStep(true), AUTO_DELAYS[currentStep] || 1500);
-  } else if (currentStep >= steps.length - 1) {
-    autoMode = false;
-    toggleAutoBtn.classList.remove('active');
-    toggleAutoBtn.textContent = 'Passer en mode auto';
-  }
-}
-
-function startAutoPlay() {
-  resetScene();
-  autoMode = true;
-  toggleAutoBtn.classList.add('active');
-  toggleAutoBtn.textContent = 'Mode auto en cours...';
-  hintText.textContent = 'Le mode auto déroule chaque étape.';
-  nextStep(true);
-}
-
-toggleAutoBtn.addEventListener('click', () => {
-  if (autoMode) {
-    clearTimeout(autoTimeout);
-    autoMode = false;
-    toggleAutoBtn.classList.remove('active');
-    toggleAutoBtn.textContent = 'Passer en mode auto';
-    hintText.textContent = 'Mode manuel actif. Cliquez sur la scène pour avancer.';
-  } else {
-    startAutoPlay();
-  }
-});
-
-stage.addEventListener('click', () => {
-  if (autoMode) return;
-  if (currentStep >= steps.length - 1) {
-    resetScene();
-    return;
-  }
-  nextStep();
-});
-
-resetScene();
+buildMenu();
+selectScene(0);
