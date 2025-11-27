@@ -347,6 +347,17 @@ header h1 {
 .card.pulse { animation: pulse 3s ease-in-out infinite; }
 .card.alert { border-color: rgba(255, 99, 132, 0.6); box-shadow: 0 8px 20px rgba(255, 99, 132, 0.3); }
 
+.typing { position: relative; }
+.typing::after {
+  content: '';
+  position: absolute;
+  right: -8px;
+  width: 10px;
+  height: 18px;
+  border-right: 2px solid var(--accent-strong);
+  animation: blink 1s steps(1, end) infinite;
+}
+
 .bubble-card {
   backdrop-filter: blur(6px);
   border-radius: 16px;
@@ -645,6 +656,11 @@ footer {
 @keyframes flash {
   from { opacity: 0.4; }
   to { opacity: 1; }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
 }
 
 @media (max-width: 960px) {

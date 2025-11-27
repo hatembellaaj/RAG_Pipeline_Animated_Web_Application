@@ -78,6 +78,24 @@ function clearCanvas() {
   canvas.innerHTML = '';
 }
 
+function typeText(element, text, speed = 22, delay = 0) {
+  element.textContent = '';
+  element.classList.add('typing');
+
+  let index = 0;
+  function step() {
+    if (index <= text.length) {
+      element.textContent = text.slice(0, index);
+      index += 1;
+      setTimeout(step, speed);
+    } else {
+      element.classList.remove('typing');
+    }
+  }
+
+  setTimeout(step, delay);
+}
+
 function createCard(title, subtitle) {
   const card = document.createElement('div');
   card.className = 'card pulse';
@@ -212,7 +230,15 @@ function animateCore() {
   chatgptCard.classList.add('bubble-card', 'from-ai');
   chatgptCard.style.left = '280px';
   chatgptCard.style.top = '320px';
+  const chatgptBody = chatgptCard.querySelector('p');
+  chatgptBody.textContent = '';
   canvas.appendChild(chatgptCard);
+  typeText(
+    chatgptBody,
+    'Air quality, water safety, housing, and heat exposure all shape health outcomes.',
+    18,
+    200
+  );
 
   const summaryCard = createCard(
     'Answer highlights',
