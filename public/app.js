@@ -20,7 +20,7 @@ const scenes = [
   {
     id: 'logic',
     title: 'Pipeline Logic: Ingest & Answer',
-    desc: 'A skeleton of the ingestion and answering loop.',
+    desc: 'Two parallel flows show how ingestion and user requests progress.',
     action: animateLogic,
   },
   {
@@ -141,7 +141,7 @@ function createMonitor() {
 function createTerminalStack() {
   const stack = document.createElement('div');
   stack.className = 'terminal-stack';
-  ['ls -la', 'python ingest.py', 'npm run dev'].forEach((command, idx) => {
+  ['response', 'response', 'response'].forEach((command, idx) => {
     const line = document.createElement('div');
     line.className = 'command-line';
     line.style.animationDelay = `${idx * 200}ms`;
@@ -291,29 +291,57 @@ function animateLogic() {
   clearCanvas();
   sceneTitle.textContent = scenes[2].title;
   sceneDesc.textContent = scenes[2].desc;
-  updatePhase('Ingestion prepares data; requests fetch answers in a loop.');
+  updatePhase('Ingestion builds the index while user requests embed, retrieve, and rank.');
 
-  const ingest = createNode('Ingestion', 'onprem');
-  ingest.style.left = '80px';
-  ingest.style.top = '80px';
-  canvas.appendChild(ingest);
+  const ingestLabel = document.createElement('div');
+  ingestLabel.className = 'flow-label';
+  ingestLabel.textContent = 'Ingestion';
+  ingestLabel.style.left = '60px';
+  ingestLabel.style.top = '60px';
+  canvas.appendChild(ingestLabel);
 
-  const index = createNode('Index', 'secure');
-  index.style.left = '260px';
-  index.style.top = '200px';
-  canvas.appendChild(index);
+  const ingestSteps = ['Collect Data', 'Cleaning', 'Chunking', 'Embedding', 'Indexing'];
+  ingestSteps.forEach((label, idx) => {
+    const node = createNode(label, idx < 4 ? 'cloud' : 'secure');
+    node.style.left = `${70 + idx * 130}px`;
+    node.style.top = '100px';
+    node.style.animationDelay = `${idx * 120}ms`;
+    canvas.appendChild(node);
 
-  const answer = createNode('Answering', 'cloud');
-  answer.style.left = '480px';
-  answer.style.top = '120px';
-  canvas.appendChild(answer);
+    if (idx < ingestSteps.length - 1) {
+      const arrow = createArrow(
+        { x: 120 + idx * 130, y: 120 },
+        { x: 200 + idx * 130, y: 120 },
+        idx * 120
+      );
+      canvas.appendChild(arrow);
+    }
+  });
 
-  const arrows = [
-    createArrow({ x: 120, y: 120 }, { x: 320, y: 220 }),
-    createArrow({ x: 320, y: 220 }, { x: 540, y: 160 }, 200),
-    createArrow({ x: 520, y: 160 }, { x: 160, y: 120 }, 400),
-  ];
-  arrows.forEach((a) => canvas.appendChild(a));
+  const requestLabel = document.createElement('div');
+  requestLabel.className = 'flow-label';
+  requestLabel.textContent = 'User Request';
+  requestLabel.style.left = '60px';
+  requestLabel.style.top = '230px';
+  canvas.appendChild(requestLabel);
+
+  const requestSteps = ['Embedding', 'Retrieval', 'Ranking', 'LLM'];
+  requestSteps.forEach((label, idx) => {
+    const node = createNode(label, idx === requestSteps.length - 1 ? 'cloud' : 'onprem');
+    node.style.left = `${100 + idx * 150}px`;
+    node.style.top = '270px';
+    node.style.animationDelay = `${idx * 140}ms`;
+    canvas.appendChild(node);
+
+    if (idx < requestSteps.length - 1) {
+      const arrow = createArrow(
+        { x: 150 + idx * 150, y: 290 },
+        { x: 230 + idx * 150, y: 290 },
+        idx * 140
+      );
+      canvas.appendChild(arrow);
+    }
+  });
 }
 
 function animateIngestion() {
