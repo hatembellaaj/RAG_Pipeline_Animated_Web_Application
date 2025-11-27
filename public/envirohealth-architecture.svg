@@ -1,0 +1,92 @@
+<svg width="1100" height="520" viewBox="0 0 1100 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">EnviroHealth Advisor - System Architecture</title>
+  <desc id="desc">Diagram showing how the browser, reverse proxy, FastAPI backend, OpenAI Assistant API, and external weather and air quality APIs connect to provide recommendations.</desc>
+  <defs>
+    <linearGradient id="pane" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0f4ff" stop-opacity="0.96"/>
+      <stop offset="100%" stop-color="#d9e7ff" stop-opacity="0.9"/>
+    </linearGradient>
+    <linearGradient id="highlight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff7d6"/>
+      <stop offset="100%" stop-color="#ffe9a8"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#34495e" />
+    </marker>
+    <style>
+      text { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; fill: #2e3c4d; }
+      .title { font-size: 22px; font-weight: 700; fill: #2d3436; }
+      .subtitle { font-size: 13px; fill: #4d5968; }
+      .box { stroke: #7f8c8d; stroke-width: 2; fill: url(#pane); rx: 12; }
+      .highlight { stroke: #d4ac0d; stroke-width: 2; fill: url(#highlight); rx: 12; }
+      .note { font-size: 12px; fill: #34495e; }
+      .arrow { stroke: #34495e; stroke-width: 2.5; fill: none; marker-end: url(#arrow); }
+      .dotted { stroke-dasharray: 6 6; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1100" height="520" fill="#f7f9fc" stroke="#e3e7ee" />
+  <text x="550" y="36" text-anchor="middle" class="title">EnviroHealth Advisor - System Architecture</text>
+
+  <rect class="highlight" x="640" y="110" width="230" height="72" />
+  <text x="755" y="140" text-anchor="middle" font-weight="700">FastAPI Backend</text>
+  <text x="755" y="160" text-anchor="middle" class="subtitle">Endpoints:</text>
+  <text x="755" y="180" text-anchor="middle" class="subtitle">- POST /recommend | - GET /health</text>
+
+  <rect class="highlight" x="640" y="230" width="230" height="90" />
+  <text x="755" y="260" text-anchor="middle" font-weight="700">OpenAI Assistant API</text>
+  <text x="755" y="280" text-anchor="middle" class="subtitle">Uses:</text>
+  <text x="755" y="300" text-anchor="middle" class="subtitle">OPENAI_API_KEY + Assistant ID (if configured)</text>
+
+  <rect class="box" x="910" y="190" width="150" height="66" />
+  <text x="985" y="225" text-anchor="middle" font-weight="700">Open-Meteo</text>
+  <text x="985" y="245" text-anchor="middle" class="subtitle">Weather API</text>
+
+  <rect class="box" x="910" y="290" width="150" height="66" />
+  <text x="985" y="325" text-anchor="middle" font-weight="700">Open-Meteo Air</text>
+  <text x="985" y="345" text-anchor="middle" class="subtitle">Quality API</text>
+
+  <rect class="box" x="130" y="110" width="220" height="70" />
+  <text x="240" y="145" text-anchor="middle" font-weight="700">Nginx Reverse Proxy</text>
+  <text x="240" y="165" text-anchor="middle" class="subtitle">(front-end: 8081, api: backend:5200)</text>
+
+  <rect class="box" x="110" y="220" width="200" height="66" />
+  <text x="210" y="255" text-anchor="middle" font-weight="700">Browser</text>
+  <text x="210" y="275" text-anchor="middle" class="subtitle">Display personalized</text>
+  <text x="210" y="292" text-anchor="middle" class="subtitle">recommendations</text>
+
+  <rect class="box" x="70" y="340" width="140" height="60" />
+  <text x="140" y="370" text-anchor="middle" font-weight="700">User</text>
+
+  <path class="arrow" d="M 200 200 C 220 190 300 180 620 170" />
+  <text class="note" x="410" y="160">Forward request</text>
+
+  <path class="arrow" d="M 620 140 C 520 130 330 130 260 130" marker-end="url(#arrow)" />
+  <text class="note" x="420" y="115">GET /forecast</text>
+
+  <path class="arrow" d="M 850 260 L 910 220" />
+  <text class="note" x="870" y="210">GET /forecast</text>
+
+  <path class="arrow" d="M 850 280 L 910 320" />
+  <text class="note" x="870" y="335">GET /air-quality</text>
+
+  <path class="arrow dotted" d="M 330 150 C 430 150 620 150 640 150" />
+  <text class="note" x="430" y="133">Create/Update Assistant (if configured)</text>
+
+  <path class="arrow" d="M 250 255 C 320 250 600 240 640 240" />
+  <text class="note" x="410" y="230">POST /api/recommend</text>
+
+  <path class="arrow" d="M 640 280 C 520 300 320 310 210 310" />
+  <text class="note" x="390" y="325">Forward payload</text>
+
+  <path class="arrow" d="M 140 340 L 140 300" />
+  <text class="note" x="160" y="325">Submit form</text>
+
+  <rect class="box" x="380" y="360" width="340" height="90" />
+  <text x="550" y="390" text-anchor="middle" font-weight="700">Recommendations</text>
+  <text x="550" y="410" text-anchor="middle" class="subtitle">Environmentally-friendly health advice</text>
+  <text x="550" y="430" text-anchor="middle" class="subtitle">with context &amp; RAG retrieval</text>
+
+  <path class="arrow" d="M 640 300 C 620 340 590 360 550 360" />
+  <path class="arrow" d="M 460 360 C 400 340 250 330 210 310" />
+</svg>

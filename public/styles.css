@@ -1053,6 +1053,26 @@ body {
   margin-top: 10px;
 }
 
+.architecture-figure {
+  background: rgba(3, 6, 13, 0.92);
+  border: 1px solid rgba(123, 215, 243, 0.35);
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+  text-align: center;
+}
+
+.architecture-figure img {
+  width: 100%;
+  max-width: 980px;
+  display: block;
+  margin: 0 auto 10px auto;
+  border-radius: 12px;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.45);
+  background: #f7f9fc;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
 .mermaid-wrapper {
   background: rgba(3, 6, 13, 0.92);
   border: 1px solid rgba(123, 215, 243, 0.35);
