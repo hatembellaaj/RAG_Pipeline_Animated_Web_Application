@@ -165,6 +165,171 @@ header h1 {
   animation: shimmer 3s ease-in-out infinite;
 }
 
+.photo-frame {
+  position: absolute;
+  width: 140px;
+  height: 180px;
+  padding: 10px;
+  background: linear-gradient(180deg, rgba(12, 17, 31, 0.92), rgba(6, 9, 16, 0.9));
+  border: 1px solid rgba(123, 215, 243, 0.4);
+  border-radius: 16px;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
+  animation: slide-in 0.7s ease forwards, float 5s ease-in-out infinite;
+  opacity: 0;
+}
+
+.photo {
+  position: relative;
+  width: 100%;
+  height: 120px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 30%, rgba(255, 209, 102, 0.28), rgba(12, 17, 31, 0.9)),
+    url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/300px-User-avatar.svg.png');
+  background-size: cover;
+  background-position: center;
+  filter: saturate(1.2);
+}
+
+.photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent, rgba(12, 17, 31, 0.7));
+}
+
+.photo-label {
+  margin-top: 10px;
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.photo-label strong {
+  color: var(--text);
+}
+
+.device.monitor {
+  position: absolute;
+  width: 220px;
+  height: 150px;
+  padding: 12px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(12, 17, 31, 0.85));
+  border: 1px solid rgba(123, 215, 243, 0.35);
+  border-radius: 18px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.38);
+  animation: slide-in 0.6s ease forwards, float 6s ease-in-out infinite;
+  opacity: 0;
+}
+
+.screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #03060d;
+  border: 1px solid rgba(123, 215, 243, 0.3);
+}
+
+.window-bar {
+  display: flex;
+  gap: 6px;
+  padding: 8px;
+  background: rgba(123, 215, 243, 0.08);
+}
+
+.window-bar span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 209, 102, 0.9), rgba(255, 209, 102, 0.4));
+  box-shadow: 0 0 8px rgba(255, 209, 102, 0.6);
+}
+
+.window-bar span:nth-child(2) {
+  background: radial-gradient(circle, rgba(76, 201, 240, 0.9), rgba(76, 201, 240, 0.4));
+  box-shadow: 0 0 8px rgba(76, 201, 240, 0.6);
+}
+
+.window-bar span:nth-child(3) {
+  background: radial-gradient(circle, rgba(162, 243, 157, 0.9), rgba(162, 243, 157, 0.4));
+  box-shadow: 0 0 8px rgba(162, 243, 157, 0.6);
+}
+
+.screen-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(18, 216, 255, 0.25), transparent 40%),
+    radial-gradient(circle at 70% 60%, rgba(162, 243, 157, 0.2), transparent 38%);
+  filter: blur(0.5px);
+}
+
+.terminal-stack {
+  position: absolute;
+  width: 190px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(123, 215, 243, 0.35);
+  background: linear-gradient(160deg, rgba(12, 17, 31, 0.92), rgba(6, 9, 16, 0.88));
+  box-shadow: 0 12px 22px rgba(0, 0, 0, 0.35);
+  animation: slide-in 0.7s ease forwards, float 6s ease-in-out infinite;
+  opacity: 0;
+}
+
+.command-line {
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  color: var(--text);
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(123, 215, 243, 0.2);
+  opacity: 0;
+  animation: pop-in 0.8s ease forwards;
+}
+
+.command-line:last-child {
+  border-bottom: none;
+}
+
+.command-line .prompt {
+  color: var(--accent-strong);
+  margin-right: 6px;
+}
+
+.ai-logo {
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #0b0f18;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+  background: #fff;
+  opacity: 0;
+  animation: pop-in 0.8s ease forwards;
+}
+
+#ai-logo-row {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(12, 17, 31, 0.82);
+  border: 1px solid rgba(123, 215, 243, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 14px 26px rgba(0, 0, 0, 0.35);
+}
+
+.ai-logo.emerald { background: linear-gradient(145deg, #8ff0c4, #4ade80); }
+.ai-logo.sky { background: linear-gradient(145deg, #93c5fd, #38bdf8); }
+.ai-logo.amber { background: linear-gradient(145deg, #fcd34d, #f59e0b); }
+.ai-logo.pink { background: linear-gradient(145deg, #f9a8d4, #ec4899); }
+.ai-logo.violet { background: linear-gradient(145deg, #c4b5fd, #8b5cf6); }
+.ai-logo.slate { background: linear-gradient(145deg, #cbd5e1, #94a3b8); }
+
 .card {
   position: absolute;
   background: rgba(12, 17, 31, 0.9);
