@@ -926,32 +926,24 @@ function animateSolution() {
   const scene = getSceneData('solution');
   sceneTitle.textContent = scene.title;
   sceneDesc.textContent = scene.desc;
-  updatePhase('On-prem vector store feeds only curated chunks to the cloud LLM.');
+  updatePhase('On-prem components call Azure AI Foundry through a private endpoint with only sanitized chunks.');
 
-  const store = createNode('On-Prem Vector Store', 'onprem');
-  store.style.left = '80px';
-  store.style.top = '180px';
-  canvas.appendChild(store);
+  const figureFrame = document.createElement('div');
+  figureFrame.className = 'figure-frame';
 
-  const filter = createNode('Policy Filter', 'secure');
-  filter.style.left = '300px';
-  filter.style.top = '180px';
-  canvas.appendChild(filter);
+  const figure = document.createElement('img');
+  figure.src = 'on-prem-rag-architecture.svg';
+  figure.alt = 'On-prem RAG pipeline calling an Azure AI Foundry private endpoint with sanitized chunks only.';
+  figure.loading = 'lazy';
+  figure.className = 'full-figure';
 
-  const llm = createNode('Cloud LLM', 'cloud');
-  llm.style.left = '520px';
-  llm.style.top = '180px';
-  canvas.appendChild(llm);
+  const caption = document.createElement('p');
+  caption.className = 'figure-caption';
+  caption.textContent = 'No raw documents leave the firewall—only filtered, referenced chunks are sent to Azure AI Foundry over a private endpoint.';
 
-  [
-    createArrow({ x: 140, y: 200 }, { x: 340, y: 200 }),
-    createArrow({ x: 360, y: 200 }, { x: 580, y: 200 }, 200),
-  ].forEach((a) => canvas.appendChild(a));
-
-  const badge = document.createElement('div');
-  badge.id = 'green-badge';
-  badge.textContent = 'PHI stays local';
-  canvas.appendChild(badge);
+  figureFrame.appendChild(figure);
+  canvas.appendChild(figureFrame);
+  canvas.appendChild(caption);
 }
 
 function animateTools() {
