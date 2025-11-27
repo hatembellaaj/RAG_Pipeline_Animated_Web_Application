@@ -32,8 +32,8 @@ const scenes = [
   {
     id: 'response',
     title: 'Responding to a User',
-    desc: 'Retrieval and LLM orchestration compose the final reply.',
-    action: animateIngestion,
+    desc: 'Embedding, retrieval, ranking, and the LLM craft a grounded reply.',
+    action: animateResponse,
   },
   {
     id: 'assistant-setup',
@@ -43,8 +43,8 @@ const scenes = [
   },
   {
     id: 'assistant',
-    title: 'Assistants in Real Life (Callbot)',
-    desc: 'A callbot scenario routes intents and gathers knowledge.',
+    title: 'Tools that Tune Generative Responses',
+    desc: 'Retrieval, ranking, and guardrails combine with tools to optimize answers.',
     action: animateCallbot,
   },
   {
@@ -463,32 +463,59 @@ function animateResponse() {
   clearCanvas();
   sceneTitle.textContent = scenes[4].title;
   sceneDesc.textContent = scenes[4].desc;
-  updatePhase('Relevant chunks are retrieved, then composed by the LLM.');
+  updatePhase('A user request embeds, retrieves, re-ranks, and flows into the LLM answer.');
 
-  const query = createNode('User Query', 'secure');
-  query.style.left = '80px';
-  query.style.top = '200px';
-  canvas.appendChild(query);
+  const track = document.createElement('div');
+  track.className = 'response-track';
+  canvas.appendChild(track);
 
-  const retrieval = createNode('Retriever', 'onprem');
-  retrieval.style.left = '260px';
-  retrieval.style.top = '200px';
-  canvas.appendChild(retrieval);
+  const stages = [
+    { label: 'User Request', tone: 'secure', detail: 'Health question arrives' },
+    { label: 'Embedding', tone: 'cloud', detail: 'Vectorize the query' },
+    { label: 'Retrieval', tone: 'onprem', detail: 'Compare with index' },
+    { label: 'Ranking', tone: 'amber', detail: 'Score the candidates' },
+    { label: 'LLM', tone: 'cloud', detail: 'Compose grounded reply' },
+  ];
 
-  const llm = createNode('LLM', 'cloud');
-  llm.style.left = '440px';
-  llm.style.top = '200px';
-  canvas.appendChild(llm);
+  stages.forEach((stage, idx) => {
+    const block = document.createElement('div');
+    block.className = `stage-block ${stage.tone}`;
+    block.style.animationDelay = `${idx * 120}ms`;
+    block.innerHTML = `
+      <div class="stage-label">${stage.label}</div>
+      <p>${stage.detail}</p>
+    `;
+    track.appendChild(block);
+  });
 
-  [
-    createArrow({ x: 120, y: 220 }, { x: 300, y: 220 }),
-    createArrow({ x: 320, y: 220 }, { x: 500, y: 220 }, 200),
-  ].forEach((a) => canvas.appendChild(a));
+  const lane = document.createElement('div');
+  lane.className = 'flow-lane';
+  track.appendChild(lane);
 
-  const bubble = document.createElement('div');
-  bubble.id = 'answer-bubble';
-  bubble.textContent = 'Grounded answer is built from top-ranked passages...';
-  canvas.appendChild(bubble);
+  ['Vectorize', 'Top-k passages', 'Re-ranked list'].forEach((text, idx) => {
+    const chip = document.createElement('div');
+    chip.className = 'flow-chip';
+    chip.style.setProperty('--delay', `${idx * 0.6}s`);
+    chip.textContent = text;
+    lane.appendChild(chip);
+  });
+
+  const ranking = document.createElement('div');
+  ranking.className = 'ranking-panel';
+  ranking.innerHTML = `
+    <div class="ranking-bar" style="--width: 92%"></div>
+    <div class="ranking-bar" style="--width: 76%"></div>
+    <div class="ranking-bar" style="--width: 55%"></div>
+  `;
+  track.appendChild(ranking);
+
+  const answer = document.createElement('div');
+  answer.className = 'llm-answer';
+  answer.innerHTML = `
+    <strong>LLM Response</strong>
+    <p>Grounded reply synthesized from the highest ranked passages.</p>
+  `;
+  track.appendChild(answer);
 }
 
 function animateAssistantSetup() {
@@ -608,34 +635,51 @@ function animateCallbot() {
   clearCanvas();
   sceneTitle.textContent = scenes[6].title;
   sceneDesc.textContent = scenes[6].desc;
-  updatePhase('A call comes in, intents route to knowledge and voice synthesis.');
+  updatePhase('Retrieval, tools, and guardrails cooperate to optimize the LLM response.');
 
-  const phone = createNode('Call In', 'secure');
-  phone.style.left = '80px';
-  phone.style.top = '120px';
-  canvas.appendChild(phone);
+  const grid = document.createElement('div');
+  grid.className = 'tool-grid';
+  canvas.appendChild(grid);
 
-  const intent = createNode('Intent Router', 'cloud');
-  intent.style.left = '240px';
-  intent.style.top = '80px';
-  canvas.appendChild(intent);
+  const helpers = [
+    {
+      title: 'Retrieval',
+      body: 'Ground answers with search over vector and keyword indexes.',
+    },
+    {
+      title: 'Re-Ranking',
+      body: 'Boost precision with cross-encoder scoring before generation.',
+    },
+    {
+      title: 'Guardrails',
+      body: 'Detect PII, enforce policy, and route to safe fallbacks.',
+    },
+    {
+      title: 'Tool Use',
+      body: 'Functions, calculators, and code execution refine the draft.',
+    },
+  ];
 
-  const kb = createNode('Knowledge', 'onprem');
-  kb.style.left = '240px';
-  kb.style.top = '220px';
-  canvas.appendChild(kb);
+  const helperList = document.createElement('div');
+  helperList.className = 'helper-list';
 
-  const tts = createNode('Voice Synth', 'cloud');
-  tts.style.left = '440px';
-  tts.style.top = '140px';
-  canvas.appendChild(tts);
+  helpers.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'tool-card';
+    card.style.animationDelay = `${idx * 140}ms`;
+    card.innerHTML = `<strong>${item.title}</strong><p>${item.body}</p>`;
+    helperList.appendChild(card);
+  });
 
-  [
-    createArrow({ x: 120, y: 140 }, { x: 280, y: 100 }),
-    createArrow({ x: 120, y: 140 }, { x: 280, y: 240 }, 120),
-    createArrow({ x: 280, y: 240 }, { x: 480, y: 180 }, 240),
-    createArrow({ x: 280, y: 100 }, { x: 480, y: 180 }, 360),
-  ].forEach((a) => canvas.appendChild(a));
+  const diagram = document.createElement('pre');
+  diagram.className = 'diagram-block';
+  diagram.textContent = `flowchart LR\n  User[User request] --> Embed[Embedding]\n  Embed --> Retrieve[Retriever + Vector DB]\n  Retrieve --> Rank[Re-ranker]\n  Rank --> Orchestrator[Tool Orchestrator]\n  Orchestrator -->|Calls| Tools[Domain tools]\n  Orchestrator --> LLM[LLM]\n  Tools --> Orchestrator\n  LLM --> Response[Optimized response]`;
+
+  const caption = document.createElement('div');
+  caption.className = 'diagram-caption';
+  caption.textContent = 'Mermaid architecture sketch of the tool-enhanced response loop.';
+
+  grid.append(helperList, diagram, caption);
 }
 
 function animateConstraints() {
