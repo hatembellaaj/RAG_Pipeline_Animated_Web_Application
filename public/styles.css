@@ -33,6 +33,38 @@ body {
   margin: 0 auto;
 }
 
+.mermaid-section {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+}
+
+.mermaid-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  align-items: center;
+  background: radial-gradient(circle at 10% 20%, rgba(18, 216, 255, 0.16), rgba(12, 17, 31, 0.95));
+  border: 1px solid rgba(123, 215, 243, 0.3);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.42);
+}
+
+.mermaid-copy h2 {
+  margin-top: 4px;
+  font-size: 1.5rem;
+}
+
+.mermaid-copy p {
+  color: var(--muted);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+#mermaid-architecture {
+  min-height: 220px;
+}
+
 .brand {
   display: flex;
   gap: 12px;
@@ -1024,12 +1056,17 @@ body {
   font-size: 0.95rem;
 }
 
+.diagram-caption.compact {
+  margin-top: 10px;
+}
+
 .mermaid-wrapper {
   background: rgba(3, 6, 13, 0.92);
   border: 1px solid rgba(123, 215, 243, 0.35);
   border-radius: 14px;
   padding: 12px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+  overflow-x: auto;
 }
 
 .mermaid-diagram svg {
