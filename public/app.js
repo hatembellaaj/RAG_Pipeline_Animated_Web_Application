@@ -33,7 +33,13 @@ const scenes = [
     id: 'response',
     title: 'Responding to a User',
     desc: 'Retrieval and LLM orchestration compose the final reply.',
-    action: animateResponse,
+    action: animateIngestion,
+  },
+  {
+    id: 'assistant-setup',
+    title: 'Create an OpenAI Assistant',
+    desc: 'A guided walkthrough of each field required to configure an assistant.',
+    action: animateAssistantSetup,
   },
   {
     id: 'assistant',
@@ -485,10 +491,123 @@ function animateResponse() {
   canvas.appendChild(bubble);
 }
 
-function animateCallbot() {
+function animateAssistantSetup() {
   clearCanvas();
   sceneTitle.textContent = scenes[5].title;
   sceneDesc.textContent = scenes[5].desc;
+  updatePhase('Name, instruct, select tools, and tune sampling before going live.');
+
+  const grid = document.createElement('div');
+  grid.className = 'assistant-grid';
+  canvas.appendChild(grid);
+
+  const fieldList = document.createElement('div');
+  fieldList.className = 'field-list';
+
+  const fields = [
+    {
+      title: 'Name',
+      desc: 'Friendly identifier shown in the dashboard. Use a concise, purpose-driven name (e.g., “Env Health Advisor”).',
+    },
+    {
+      title: 'Instructions',
+      desc: 'System-level guidance that sets persona, safety boundaries, tone, and fallback behaviors. Include disclaimers for health/finance.',
+    },
+    {
+      title: 'Model',
+      desc: 'Pick the model powering replies (e.g., gpt-4o-mini). Balances quality, latency, and cost.',
+    },
+    {
+      title: 'Tools',
+      desc: 'Enable Code Interpreter, Retrieval, and function calling when needed. Document when each tool should be invoked.',
+    },
+    {
+      title: 'Temperature',
+      desc: 'Controls randomness (0–2). Lower for deterministic answers; raise slightly for creative tone.',
+    },
+    {
+      title: 'Top P',
+      desc: 'Nucleus sampling alternative to temperature. Adjust one sampling setting at a time to avoid unpredictable output.',
+    },
+    {
+      title: 'Max response tokens',
+      desc: 'Caps the length of generated answers so the assistant does not stream excessively long replies.',
+    },
+    {
+      title: 'Response format',
+      desc: 'Choose text or JSON schema. Structured JSON ensures downstream tools parse the reply safely.',
+    },
+    {
+      title: 'Vector store',
+      desc: 'Attach a file search store. Upload PDFs/CSVs/notes, then index them so retrieval can ground answers.',
+    },
+    {
+      title: 'Run configuration',
+      desc: 'Threads hold message history. Enable streaming for live tokens and capture run IDs for observability.',
+    },
+    {
+      title: 'Safety & compliance',
+      desc: 'Add PII handling rules, rate limits, and error fallbacks. Log tool calls for audit readiness.',
+    },
+  ];
+
+  fields.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'field-card';
+    card.style.animationDelay = `${idx * 80}ms`;
+    card.innerHTML = `<h4>${item.title}</h4><p>${item.desc}</p>`;
+    fieldList.appendChild(card);
+  });
+
+  const preview = document.createElement('div');
+  preview.className = 'assistant-preview';
+  preview.innerHTML = `
+    <div class="assistant-window">
+      <div class="window-head">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+        <strong>OpenAI Assistants</strong>
+      </div>
+      <div class="assistant-body">
+        <div class="form-row">
+          <label>Name</label>
+          <div class="input fake">assistant_env</div>
+        </div>
+        <div class="form-row">
+          <label>Instructions</label>
+          <div class="input fake">Provide specific ideas, recommendations, sentiment, summarization...</div>
+        </div>
+        <div class="pill-row">
+          <span class="pill">Model: gpt-4o-mini</span>
+          <span class="pill">Temperature: 1.0</span>
+          <span class="pill">Top P: 1.0</span>
+          <span class="pill">Response format: text</span>
+        </div>
+        <div class="form-row grid">
+          <div>
+            <label>Max response tokens</label>
+            <div class="input fake">2048</div>
+          </div>
+          <div>
+            <label>Vector store</label>
+            <div class="input fake">file-search connected</div>
+          </div>
+        </div>
+        <div class="helper">
+          Tip: Toggle tools (Code Interpreter, Retrieval) only when instructions tell the assistant when to use them.
+        </div>
+      </div>
+    </div>
+  `;
+
+  grid.append(fieldList, preview);
+}
+
+function animateCallbot() {
+  clearCanvas();
+  sceneTitle.textContent = scenes[6].title;
+  sceneDesc.textContent = scenes[6].desc;
   updatePhase('A call comes in, intents route to knowledge and voice synthesis.');
 
   const phone = createNode('Call In', 'secure');
@@ -521,8 +640,8 @@ function animateCallbot() {
 
 function animateConstraints() {
   clearCanvas();
-  sceneTitle.textContent = scenes[6].title;
-  sceneDesc.textContent = scenes[6].desc;
+  sceneTitle.textContent = scenes[7].title;
+  sceneDesc.textContent = scenes[7].desc;
   updatePhase('Compliance locks guard PHI with audit trails and encryption.');
 
   const shield = document.createElement('div');
@@ -541,8 +660,8 @@ function animateConstraints() {
 
 function animateSolution() {
   clearCanvas();
-  sceneTitle.textContent = scenes[7].title;
-  sceneDesc.textContent = scenes[7].desc;
+  sceneTitle.textContent = scenes[8].title;
+  sceneDesc.textContent = scenes[8].desc;
   updatePhase('On-prem vector store feeds only curated chunks to the cloud LLM.');
 
   const store = createNode('On-Prem Vector Store', 'onprem');
@@ -573,8 +692,8 @@ function animateSolution() {
 
 function animateTools() {
   clearCanvas();
-  sceneTitle.textContent = scenes[8].title;
-  sceneDesc.textContent = scenes[8].desc;
+  sceneTitle.textContent = scenes[9].title;
+  sceneDesc.textContent = scenes[9].desc;
   updatePhase('Quality dials highlight coverage, grounding, and hallucination checks.');
 
   ['Coverage', 'Faithfulness', 'Noise filter'].forEach((label, idx) => {
@@ -595,8 +714,8 @@ function animateTools() {
 
 function animateResearch() {
   clearCanvas();
-  sceneTitle.textContent = scenes[9].title;
-  sceneDesc.textContent = scenes[9].desc;
+  sceneTitle.textContent = scenes[10].title;
+  sceneDesc.textContent = scenes[10].desc;
   updatePhase('Research acronyms orbit the hub: Agents-to-Agents, MCP, ACP.');
 
   const hub = document.createElement('div');
