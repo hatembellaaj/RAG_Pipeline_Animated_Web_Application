@@ -778,7 +778,20 @@ function animateArchitecture() {
   caption.textContent = 'Architecture inspired by EnviroHealthAdvisor: the SPA hands context to the OpenAI Assistant, which queries vector/file search before replying.';
   diagramCard.appendChild(caption);
 
-  grid.append(highlightList, diagramCard);
+  const figureCard = document.createElement('div');
+  figureCard.className = 'architecture-figure';
+
+  const figureImage = document.createElement('img');
+  figureImage.src = 'envirohealth-architecture.svg';
+  figureImage.alt = 'EnviroHealth Advisor system architecture diagram showing the reverse proxy, FastAPI backend, assistant API, and Open-Meteo services.';
+  figureCard.appendChild(figureImage);
+
+  const figureCaption = document.createElement('div');
+  figureCaption.className = 'diagram-caption compact';
+  figureCaption.textContent = 'EnviroHealth Advisor system architecture now appears directly in the storyboard: the 8th page shows how requests flow through the reverse proxy, FastAPI backend, assistant, and external APIs.';
+  figureCard.appendChild(figureCaption);
+
+  grid.append(highlightList, figureCard, diagramCard);
 }
 
 function animateConstraints() {
