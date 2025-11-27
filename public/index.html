@@ -10,11 +10,16 @@
   <header>
     <h1>RAG Pipeline Animated Demo</h1>
     <p id="phase-text">Initializing pipeline...</p>
+    <div id="controls">
+      <button id="toggle-auto" type="button">Passer en mode auto</button>
+      <span id="hint-text">Cliquez sur la scène pour passer à l'étape suivante.</span>
+    </div>
   </header>
 
   <main id="stage">
     <div id="document-zone" aria-label="Document collection area"></div>
     <div id="chunk-zone" aria-label="Chunked document area"></div>
+    <div id="embedding-zone" aria-label="Embedding space with vectors"></div>
     <div id="vector-grid" aria-label="Vector index grid"></div>
     <div id="query-dot" aria-hidden="true"></div>
     <div id="llm-bubble">
@@ -24,7 +29,7 @@
   </main>
 
   <footer>
-    <p>All steps play automatically. RAG (Retrieval Augmented Generation) combines search with generation.</p>
+    <p>Choisissez le rythme : cliquez pour avancer, ou laissez le mode auto jouer tout le pipeline.</p>
   </footer>
 
   <script src="app.js"></script>
