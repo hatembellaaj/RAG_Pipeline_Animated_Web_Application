@@ -1,0 +1,146 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">On-Premise RAG Architecture with Secure Azure AI Foundry LLM Querying</title>
+  <desc id="desc">Diagram showing how an on-premise RAG pipeline calls an Azure AI Foundry private endpoint with only sanitized context.</desc>
+  <defs>
+    <linearGradient id="panel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f7fbff" stop-opacity="0.98" />
+      <stop offset="100%" stop-color="#e4edfc" stop-opacity="0.95" />
+    </linearGradient>
+    <linearGradient id="azure" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0f7ff" />
+      <stop offset="100%" stop-color="#d8e9ff" />
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#30475e" />
+    </marker>
+    <style>
+      text { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; fill: #1f2937; }
+      .title { font-size: 22px; font-weight: 800; fill: #1b263b; }
+      .subtitle { font-size: 14px; fill: #4b5563; }
+      .panel { stroke: #94a3b8; stroke-width: 1.6; fill: url(#panel); rx: 14; }
+      .azure-panel { stroke: #60a5fa; stroke-width: 1.6; fill: url(#azure); rx: 14; }
+      .node { fill: #fff; stroke: #9ca3af; stroke-width: 1.6; rx: 10; }
+      .node.azure { stroke: #3b82f6; }
+      .node.secure { stroke: #f59e0b; }
+      .label { font-size: 13px; font-weight: 700; }
+      .small { font-size: 12px; fill: #475569; font-weight: 600; }
+      .dashed { stroke-dasharray: 6 6; }
+      .arrow { stroke: #30475e; stroke-width: 2.4; fill: none; marker-end: url(#arrow); }
+      .arrow.secure { stroke: #16a34a; }
+      .bubble { fill: #ecfccb; stroke: #84cc16; stroke-width: 1.2; rx: 10; }
+      .callout { font-size: 12px; fill: #1f2937; font-weight: 700; }
+    </style>
+  </defs>
+
+  <text class="title" x="50%" y="46" text-anchor="middle">On-Premise RAG Architecture with Secure Azure AI Foundry LLM Querying</text>
+
+  <!-- On-Prem panel -->
+  <rect class="panel" x="32" y="80" width="640" height="560" />
+  <text class="label" x="52" y="110">On-Prem Infrastructure</text>
+  <text class="small" x="52" y="132">• No raw documents or sensitive data leaves the firewall</text>
+
+  <!-- Azure panel -->
+  <rect class="azure-panel" x="700" y="150" width="460" height="360" />
+  <text class="label" x="720" y="178">Azure AI Foundry (Private endpoint / VNet)</text>
+
+  <!-- On-prem nodes row 1 -->
+  <g>
+    <rect class="node" x="70" y="190" width="150" height="64" />
+    <text class="label" x="145" y="220" text-anchor="middle">Document Loader</text>
+    <text class="small" x="145" y="240" text-anchor="middle">Load &amp; chunk documents</text>
+  </g>
+  <g>
+    <rect class="node" x="250" y="190" width="150" height="64" />
+    <text class="label" x="325" y="220" text-anchor="middle">Text Splitter</text>
+    <text class="small" x="325" y="240" text-anchor="middle">Chunk documents</text>
+  </g>
+  <g>
+    <rect class="node" x="430" y="190" width="150" height="64" />
+    <text class="label" x="505" y="220" text-anchor="middle">Embedding Service</text>
+    <text class="small" x="505" y="240" text-anchor="middle">(On-Prem or Azure</text>
+    <text class="small" x="505" y="256" text-anchor="middle">Embeddings)</text>
+  </g>
+
+  <g>
+    <rect class="node secure" x="610" y="190" width="180" height="64" />
+    <text class="label" x="700" y="220" text-anchor="middle">Vector DB (On-Prem)</text>
+    <text class="small" x="700" y="240" text-anchor="middle">Store embeddings</text>
+  </g>
+
+  <!-- On-prem nodes row 2 -->
+  <g>
+    <rect class="node" x="130" y="360" width="150" height="64" />
+    <text class="label" x="205" y="390" text-anchor="middle">Retriever</text>
+    <text class="small" x="205" y="410" text-anchor="middle">Vector similarity search</text>
+  </g>
+  <g>
+    <rect class="node" x="310" y="360" width="150" height="64" />
+    <text class="label" x="385" y="390" text-anchor="middle">RAG Orchestrator</text>
+    <text class="small" x="385" y="410" text-anchor="middle">Retrieve relevant chunks</text>
+  </g>
+  <g>
+    <rect class="node" x="490" y="360" width="150" height="64" />
+    <text class="label" x="565" y="390" text-anchor="middle">Application /</text>
+    <text class="label" x="565" y="412" text-anchor="middle">API Gateway</text>
+  </g>
+  <g>
+    <rect class="node" x="670" y="360" width="150" height="64" />
+    <text class="label" x="745" y="392" text-anchor="middle">User</text>
+    <text class="small" x="745" y="414" text-anchor="middle">Ask a question</text>
+  </g>
+
+  <!-- Azure nodes -->
+  <g>
+    <rect class="node azure" x="760" y="210" width="240" height="64" />
+    <text class="label" x="880" y="238" text-anchor="middle">LLM request</text>
+    <text class="small" x="880" y="258" text-anchor="middle">Only sanitized chunks</text>
+  </g>
+
+  <g>
+    <rect class="node azure" x="760" y="310" width="240" height="70" />
+    <text class="label" x="880" y="338" text-anchor="middle">LLM inference endpoint</text>
+    <text class="small" x="880" y="358" text-anchor="middle">(Azure OpenAI / Azure Models)</text>
+  </g>
+
+  <g>
+    <rect class="node azure" x="760" y="420" width="240" height="64" />
+    <text class="label" x="880" y="448" text-anchor="middle">LLM response</text>
+    <text class="small" x="880" y="468" text-anchor="middle">with references</text>
+  </g>
+
+  <!-- Arrows for ingestion -->
+  <path class="arrow" d="M 220 222 L 250 222" />
+  <path class="arrow" d="M 400 222 L 430 222" />
+  <path class="arrow" d="M 580 222 L 610 222" />
+  <path class="arrow" d="M 700 254 L 700 360" />
+
+  <!-- Retrieval path -->
+  <path class="arrow" d="M 700 424 L 700 360" />
+  <path class="arrow" d="M 160 360 L 160 320 L 700 320" />
+  <path class="arrow" d="M 280 392 L 310 392" />
+  <path class="arrow" d="M 460 392 L 490 392" />
+  <path class="arrow secure" d="M 640 392 L 670 392" />
+
+  <!-- User question to orchestrator -->
+  <path class="arrow" d="M 745 360 L 745 330 L 385 330 L 385 360" />
+
+  <!-- API call to Azure -->
+  <path class="arrow secure" d="M 565 360 L 565 280 L 760 280" />
+  <text class="small" x="575" y="272">Filtered JSON payload</text>
+
+  <!-- Azure processing arrows -->
+  <path class="arrow" d="M 880 274 L 880 310" />
+  <path class="arrow" d="M 880 380 L 880 420" />
+
+  <!-- Response returns to orchestrator -->
+  <path class="arrow secure" d="M 760 452 L 565 452" />
+  <text class="small" x="580" y="442">LLM response with references</text>
+
+  <!-- Fallback retrieval request -->
+  <path class="arrow dashed" d="M 820 452 L 820 520 L 205 520 L 205 424" stroke="#64748b" marker-end="url(#arrow)" />
+  <text class="small" x="240" y="504">Fallback retrieval request</text>
+
+  <!-- Document ingestion callout -->
+  <rect class="bubble" x="70" y="140" width="210" height="36" />
+  <text class="callout" x="180" y="164" text-anchor="middle">Document ingestion pipeline</text>
+</svg>
