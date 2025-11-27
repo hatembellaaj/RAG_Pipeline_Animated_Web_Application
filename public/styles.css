@@ -156,6 +156,15 @@ header h1 {
   overflow: hidden;
 }
 
+#intro-spotlight {
+  position: absolute;
+  inset: 40px;
+  background: radial-gradient(circle at 40% 50%, rgba(255, 209, 102, 0.12), transparent 45%),
+    radial-gradient(circle at 70% 40%, rgba(18, 216, 255, 0.16), transparent 45%);
+  filter: blur(0.4px);
+  animation: shimmer 3s ease-in-out infinite;
+}
+
 .card {
   position: absolute;
   background: rgba(12, 17, 31, 0.9);
@@ -172,6 +181,48 @@ header h1 {
 .card p { color: var(--muted); font-size: 0.92rem; }
 .card.pulse { animation: pulse 3s ease-in-out infinite; }
 .card.alert { border-color: rgba(255, 99, 132, 0.6); box-shadow: 0 8px 20px rgba(255, 99, 132, 0.3); }
+
+.bubble-card {
+  backdrop-filter: blur(6px);
+  border-radius: 16px;
+  border-color: rgba(123, 215, 243, 0.5);
+  animation: slide-in 0.7s ease forwards, float 6s ease-in-out infinite;
+  opacity: 0;
+}
+
+.bubble-card.from-user { border-color: rgba(255, 209, 102, 0.6); box-shadow: 0 12px 26px rgba(255, 209, 102, 0.16); }
+.bubble-card.from-ai { border-color: rgba(76, 201, 240, 0.6); box-shadow: 0 12px 26px rgba(76, 201, 240, 0.18); }
+.bubble-card.callout {
+  background: linear-gradient(145deg, rgba(162, 243, 157, 0.12), rgba(76, 201, 240, 0.1));
+  border-color: rgba(162, 243, 157, 0.5);
+  box-shadow: 0 14px 28px rgba(162, 243, 157, 0.16);
+}
+
+#ai-row {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px;
+  background: rgba(12, 17, 31, 0.7);
+  border: 1px solid rgba(123, 215, 243, 0.25);
+  border-radius: 14px;
+  box-shadow: 0 12px 22px rgba(0, 0, 0, 0.35);
+}
+
+.ai-chip {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(123, 215, 243, 0.45);
+  background: linear-gradient(120deg, rgba(18, 216, 255, 0.16), rgba(18, 216, 255, 0.32));
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text);
+  animation: pop-in 0.8s ease forwards;
+  opacity: 0;
+}
 
 .node {
   position: absolute;
@@ -360,6 +411,24 @@ footer {
   font-size: 0.9rem;
 }
 
+.click-burst {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle, rgba(255, 209, 102, 0.9), rgba(18, 216, 255, 0.6));
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.2);
+  opacity: 0.8;
+  transition: transform 0.45s ease, opacity 0.45s ease;
+  box-shadow: 0 0 22px rgba(18, 216, 255, 0.4);
+}
+
+.click-burst.active {
+  transform: translate(-50%, -50%) scale(8);
+  opacity: 0;
+}
+
 .flash { animation: flash 0.8s ease; }
 
 @keyframes pulse {
@@ -376,6 +445,16 @@ footer {
   0% { opacity: 0.4; }
   50% { opacity: 1; }
   100% { opacity: 0.4; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes pop-in {
+  0% { opacity: 0; transform: translateY(10px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes orbit {

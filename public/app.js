@@ -7,8 +7,8 @@ const canvas = document.getElementById('scene-canvas');
 const scenes = [
   {
     id: 'intro',
-    title: 'Generative AI — Creative Engine',
-    desc: 'Particles orbiting a glowing core illustrate how generative AI synthesizes ideas.',
+    title: 'ChatGPT answers a health question',
+    desc: 'A user asks “How do environmental factors affect health?” while other generative AIs listen in.',
     action: animateCore,
   },
   {
@@ -111,18 +111,52 @@ function animateCore() {
   clearCanvas();
   sceneTitle.textContent = scenes[0].title;
   sceneDesc.textContent = scenes[0].desc;
-  updatePhase('Particles swirl around a creative AI core.');
+  updatePhase('ChatGPT replies while other frontier models glow in the background.');
 
-  const core = document.createElement('div');
-  core.id = 'core';
-  canvas.appendChild(core);
+  const spotlight = document.createElement('div');
+  spotlight.id = 'intro-spotlight';
+  canvas.appendChild(spotlight);
 
-  for (let i = 0; i < 32; i++) {
-    const dot = document.createElement('div');
-    dot.className = 'orbit-dot';
-    dot.style.animationDelay = `${i * 80}ms`;
-    canvas.appendChild(dot);
-  }
+  const userCard = createCard('User', 'How do environmental factors affect health?');
+  userCard.classList.add('bubble-card', 'from-user');
+  userCard.style.left = '60px';
+  userCard.style.top = '140px';
+  canvas.appendChild(userCard);
+
+  const chatgptCard = createCard(
+    'ChatGPT',
+    'Air quality, water safety, housing, and heat exposure all shape health outcomes.'
+  );
+  chatgptCard.classList.add('bubble-card', 'from-ai');
+  chatgptCard.style.left = '340px';
+  chatgptCard.style.top = '80px';
+  canvas.appendChild(chatgptCard);
+
+  const summaryCard = createCard(
+    'Answer highlights',
+    'Reduce pollution exposure, stay hydrated in heat waves, and improve ventilation to protect wellbeing.'
+  );
+  summaryCard.classList.add('bubble-card', 'callout');
+  summaryCard.style.left = '240px';
+  summaryCard.style.top = '250px';
+  canvas.appendChild(summaryCard);
+
+  const connectors = [
+    createArrow({ x: 140, y: 170 }, { x: 400, y: 130 }),
+    createArrow({ x: 420, y: 140 }, { x: 320, y: 270 }, 160),
+  ];
+  connectors.forEach((arrow) => canvas.appendChild(arrow));
+
+  const chipRow = document.createElement('div');
+  chipRow.id = 'ai-row';
+  ['Gemini', 'Mistral', 'Claude', 'Llama 3', 'Grok'].forEach((label, idx) => {
+    const chip = document.createElement('div');
+    chip.className = 'ai-chip';
+    chip.textContent = label;
+    chip.style.animationDelay = `${idx * 120}ms`;
+    chipRow.appendChild(chip);
+  });
+  canvas.appendChild(chipRow);
 }
 
 function animateUseCases() {
@@ -388,6 +422,18 @@ function selectScene(index) {
   const scene = scenes[index];
   scene.action();
 }
+
+function spawnClickBurst(event) {
+  const burst = document.createElement('div');
+  burst.className = 'click-burst';
+  burst.style.left = `${event.clientX}px`;
+  burst.style.top = `${event.clientY}px`;
+  document.body.appendChild(burst);
+  requestAnimationFrame(() => burst.classList.add('active'));
+  setTimeout(() => burst.remove(), 750);
+}
+
+document.addEventListener('click', spawnClickBurst);
 
 buildMenu();
 selectScene(0);
