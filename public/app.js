@@ -107,6 +107,26 @@ function createCard(title, subtitle) {
   return card;
 }
 
+function createUseCaseCard(title, subtitle, tone, symbol) {
+  const card = document.createElement('div');
+  card.className = `usecase-card ${tone}`;
+
+  const thumb = document.createElement('div');
+  thumb.className = 'usecase-thumb';
+  thumb.textContent = symbol;
+
+  const label = document.createElement('div');
+  label.className = 'usecase-label';
+  const h3 = document.createElement('h3');
+  h3.textContent = title;
+  const p = document.createElement('p');
+  p.textContent = subtitle;
+  label.append(h3, p);
+
+  card.append(thumb, label);
+  return card;
+}
+
 function createPortrait(label, subtitle) {
   const frame = document.createElement('div');
   frame.className = 'photo-frame';
@@ -265,21 +285,23 @@ function animateUseCases() {
   clearCanvas();
   sceneTitle.textContent = scenes[1].title;
   sceneDesc.textContent = scenes[1].desc;
-  updatePhase('Channels pulse to showcase chatbot, callbot, copilots, and agents.');
+  updatePhase('Each channel lights up with a hero image to show how it helps.');
+
+  const gallery = document.createElement('div');
+  gallery.className = 'usecase-gallery';
+  canvas.appendChild(gallery);
 
   const channels = [
-    ['Chatbot', 'Conversational answers'],
-    ['Callbot', 'Voice AI routing'],
-    ['Copilot', 'Productivity boosts'],
-    ['Agent', 'Autonomous tasks'],
+    ['Chatbot', 'Patient portal Q&A', 'sky', '💬'],
+    ['Callbot', 'Voice triage & routing', 'amber', '📞'],
+    ['Copilot', 'Workflow copilots', 'violet', '🧭'],
+    ['Agent', 'Autonomous field tasks', 'emerald', '🤖'],
   ];
 
   channels.forEach((info, idx) => {
-    const card = createCard(info[0], info[1]);
-    card.style.animationDelay = `${idx * 120}ms`;
-    card.style.left = `${12 + idx * 22}%`;
-    card.style.top = `${20 + (idx % 2) * 24}%`;
-    canvas.appendChild(card);
+    const card = createUseCaseCard(info[0], info[1], info[2], info[3]);
+    card.style.animationDelay = `${idx * 140}ms`;
+    gallery.appendChild(card);
   });
 
   const pulse = document.createElement('div');
@@ -348,30 +370,87 @@ function animateIngestion() {
   clearCanvas();
   sceneTitle.textContent = scenes[3].title;
   sceneDesc.textContent = scenes[3].desc;
-  updatePhase('Docs are cleaned, chunked, and finally indexed.');
+  updatePhase('Files stream in gray, turn clean white, chunk, embed, then stack into the index.');
 
-  const steps = [
-    createNode('Docs', 'cloud'),
-    createNode('Cleaning', 'cloud'),
-    createNode('Chunking', 'cloud'),
-    createNode('Indexing', 'secure'),
+  const track = document.createElement('div');
+  track.className = 'ingestion-track';
+  canvas.appendChild(track);
+
+  const stages = [
+    { title: 'Collect', desc: 'PDF, CSV, EMR files arrive', tone: 'cloud' },
+    { title: 'Cleaning', desc: 'Normalize, dedupe, and sanitize', tone: 'cloud' },
+    { title: 'Chunking', desc: 'Split into context windows', tone: 'cloud' },
+    { title: 'Embedding', desc: 'Vectorize each chunk', tone: 'onprem' },
+    { title: 'Indexing', desc: 'Add to secure index', tone: 'secure' },
   ];
 
-  steps.forEach((node, idx) => {
-    node.style.left = `${70 + idx * 160}px`;
-    node.style.top = '140px';
-    node.style.animationDelay = `${idx * 140}ms`;
-    canvas.appendChild(node);
+  stages.forEach((stage, idx) => {
+    const marker = document.createElement('div');
+    marker.className = `ingestion-step ${stage.tone}`;
+    marker.style.left = `${60 + idx * 190}px`;
+    marker.innerHTML = `
+      <div class="step-dot"></div>
+      <div>
+        <h4>${stage.title}</h4>
+        <p>${stage.desc}</p>
+      </div>
+    `;
+    track.appendChild(marker);
+
+    if (idx < stages.length - 1) {
+      const connector = document.createElement('div');
+      connector.className = 'ingestion-connector';
+      connector.style.left = `${130 + idx * 190}px`;
+      track.appendChild(connector);
+    }
   });
 
-  steps.slice(0, -1).forEach((_, idx) => {
-    const arrow = createArrow({ x: 120 + idx * 160, y: 160 }, { x: 220 + idx * 160, y: 160 }, idx * 140);
-    canvas.appendChild(arrow);
+  const fileTypes = ['PDF', 'CSV', 'DOCX', 'HTML', 'MD'];
+  fileTypes.forEach((type, idx) => {
+    const chip = document.createElement('div');
+    chip.className = 'file-chip raw';
+    chip.textContent = type;
+    chip.style.left = '10px';
+    chip.style.top = `${40 + idx * 28}px`;
+    track.appendChild(chip);
+
+    const delay = idx * 260;
+    setTimeout(() => {
+      chip.style.left = '70px';
+      chip.classList.add('flying');
+    }, 200 + delay);
+
+    setTimeout(() => {
+      chip.style.left = '250px';
+      chip.classList.add('cleaning');
+    }, 760 + delay);
+
+    setTimeout(() => {
+      chip.classList.remove('raw');
+      chip.classList.add('clean');
+    }, 1100 + delay);
+
+    setTimeout(() => {
+      chip.style.left = '440px';
+      chip.classList.add('chunked');
+    }, 1500 + delay);
+
+    setTimeout(() => {
+      chip.style.left = '630px';
+      chip.classList.add('embedded');
+    }, 1900 + delay);
+
+    setTimeout(() => {
+      chip.style.left = '820px';
+      chip.classList.add('indexed');
+    }, 2300 + delay);
   });
 
-  const confetti = document.createElement('div');
-  confetti.className = 'confetti';
-  canvas.appendChild(confetti);
+  const indexStack = document.createElement('div');
+  indexStack.className = 'index-stack';
+  indexStack.style.left = '780px';
+  indexStack.style.top = '120px';
+  track.appendChild(indexStack);
 }
 
 function animateResponse() {
