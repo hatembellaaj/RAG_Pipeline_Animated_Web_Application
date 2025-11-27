@@ -3,7 +3,6 @@ const menu = document.getElementById('menu');
 const sceneTitle = document.getElementById('scene-title');
 const sceneDesc = document.getElementById('scene-desc');
 const canvas = document.getElementById('scene-canvas');
-const staticMermaid = document.getElementById('mermaid-architecture');
 
 const scenes = [
   {
@@ -265,21 +264,6 @@ function renderMermaidDiagram(diagramText, container, key) {
     });
 
   return wrapper;
-}
-
-function renderArchitectureFigure() {
-  if (!staticMermaid) return;
-
-  staticMermaid.innerHTML = '';
-
-  const diagramText = `flowchart LR\n  Visitor[Visitor clicks a scene] --> UI[Animated storyboard UI]\n  UI --> API[Node/Express bridge]\n  API --> Assistant[OpenAI Assistant]\n  API --> Vector[Vector store + file search]\n  Vector --> Assistant\n  Assistant --> Tools[Domain tools]\n  Tools --> Assistant\n  Assistant --> Reply[Grounded response + telemetry]\n  Reply --> UI`;
-
-  const wrapper = renderMermaidDiagram(diagramText, staticMermaid, 'static-architecture');
-
-  const caption = document.createElement('p');
-  caption.className = 'diagram-caption compact';
-  caption.textContent = 'Mermaid figure showing how the storyboard UI hands off context to the assistant and returns grounded responses.';
-  wrapper.appendChild(caption);
 }
 
 function animateCore() {
@@ -922,6 +906,5 @@ function spawnClickBurst(event) {
 
 document.addEventListener('click', spawnClickBurst);
 
-renderArchitectureFigure();
 buildMenu();
 selectScene(0);
