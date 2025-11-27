@@ -483,6 +483,138 @@ header h1 {
   animation: pulse 4s ease-in-out infinite;
 }
 
+.usecase-gallery {
+  position: absolute;
+  inset: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.usecase-card {
+  position: relative;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(12, 17, 31, 0.85));
+  border: 1px solid rgba(123, 215, 243, 0.3);
+  border-radius: 16px;
+  padding: 14px;
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: 12px;
+  align-items: center;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35);
+  animation: slide-in 0.8s ease forwards;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.usecase-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.08), transparent 40%);
+  pointer-events: none;
+}
+
+.usecase-card.sky { border-color: rgba(76, 201, 240, 0.6); box-shadow: 0 10px 24px rgba(76, 201, 240, 0.2); }
+.usecase-card.amber { border-color: rgba(255, 209, 102, 0.6); box-shadow: 0 10px 24px rgba(255, 209, 102, 0.2); }
+.usecase-card.violet { border-color: rgba(191, 144, 255, 0.6); box-shadow: 0 10px 24px rgba(191, 144, 255, 0.2); }
+.usecase-card.emerald { border-color: rgba(162, 243, 157, 0.6); box-shadow: 0 10px 24px rgba(162, 243, 157, 0.2); }
+
+.usecase-thumb {
+  width: 72px;
+  height: 72px;
+  border-radius: 14px;
+  background: radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.16), transparent 55%),
+    linear-gradient(135deg, rgba(18, 216, 255, 0.16), rgba(255, 209, 102, 0.1));
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  border: 1px solid rgba(123, 215, 243, 0.4);
+  box-shadow: inset 0 0 18px rgba(18, 216, 255, 0.2);
+}
+
+.usecase-label h3 { font-size: 1.05rem; }
+.usecase-label p { color: var(--muted); margin-top: 4px; }
+
+.ingestion-track {
+  position: absolute;
+  inset: 30px 20px 20px 20px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(18, 216, 255, 0.05), rgba(12, 17, 31, 0.7));
+  border: 1px dashed rgba(123, 215, 243, 0.25);
+  overflow: hidden;
+}
+
+.ingestion-step {
+  position: absolute;
+  top: 20px;
+  width: 160px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(12, 17, 31, 0.9);
+  border: 1px solid rgba(123, 215, 243, 0.35);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
+  animation: slide-in 0.8s ease forwards;
+  opacity: 0;
+}
+
+.ingestion-step h4 { font-size: 0.95rem; }
+.ingestion-step p { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+.ingestion-step.cloud { border-color: rgba(76, 201, 240, 0.6); }
+.ingestion-step.onprem { border-color: rgba(162, 243, 157, 0.6); }
+.ingestion-step.secure { border-color: rgba(255, 209, 102, 0.6); }
+
+.step-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--cloud);
+  box-shadow: 0 0 10px currentColor;
+  margin-bottom: 8px;
+}
+
+.ingestion-connector {
+  position: absolute;
+  top: 56px;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, rgba(76, 201, 240, 0.6), rgba(255, 209, 102, 0.6));
+  border-radius: 8px;
+  animation: shimmer 1.6s ease infinite;
+}
+
+.file-chip {
+  position: absolute;
+  top: 90px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #2c3549;
+  color: #c8d2e7;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  transition: left 0.45s ease, top 0.45s ease, background 0.35s ease, color 0.35s ease, box-shadow 0.35s ease;
+  font-weight: 700;
+}
+
+.file-chip.raw { background: #4b5568; color: #d2d7e0; }
+.file-chip.cleaning { box-shadow: 0 0 10px rgba(255, 209, 102, 0.4); }
+.file-chip.clean { background: #f4f7ff; color: #0b0f18; border-color: rgba(76, 201, 240, 0.5); }
+.file-chip.chunked { background: repeating-linear-gradient(90deg, rgba(76, 201, 240, 0.18), rgba(76, 201, 240, 0.18) 16px, rgba(18, 216, 255, 0.14) 16px, rgba(18, 216, 255, 0.14) 32px); }
+.file-chip.embedded { box-shadow: 0 0 14px rgba(162, 243, 157, 0.7); }
+.file-chip.indexed { transform: scale(0.96); background: rgba(255, 209, 102, 0.2); border-color: rgba(255, 209, 102, 0.6); }
+
+.file-chip.flying { animation: float 4s ease-in-out infinite; }
+
+.index-stack {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  background: radial-gradient(circle at 50% 30%, rgba(255, 209, 102, 0.2), rgba(12, 17, 31, 0.8));
+  border: 1px solid rgba(255, 209, 102, 0.4);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.3), inset 0 0 18px rgba(255, 209, 102, 0.2);
+}
+
 .confetti {
   position: absolute;
   inset: 0;
